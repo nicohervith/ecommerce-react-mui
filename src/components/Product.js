@@ -15,6 +15,7 @@ import { AddShoppingCart } from "@mui/icons-material";
  import { createTheme, ThemeProvider } from "@mui/material/styles";
  import { grey } from "@mui/material/colors";
  import { makeStyles } from "@mui/styles";
+import { CardMedia } from "@mui/material";
 
 
 const ExpandMore = styled((props) => {
@@ -75,7 +76,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Product() {
+export default function Product({product:{id,name,productType,image,price,rating,description}}) {
   const classes = useStyles();
 
   const [expanded, setExpanded] = React.useState(false);
@@ -105,27 +106,26 @@ export default function Product() {
     <ThemeProvider theme={theme}>
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
-          c
           action={
             <Typography
               className={classes.action}
               variant="h5"
               color="textSecondary"
             >
-              {accounting.formatMoney(50, "€")}
+              {accounting.formatMoney(price, "€")}
             </Typography>
           }
-          title="Nike Shoes"
+          title={name}
           subheader="in stock"
         />
-        <img
-          className="card-img"
-          src="https://www.runningcorrer.com.ar/wprunning/wp-content/uploads/2020/12/nike-air-zoom-vomero-15-zapatillas-de-running-3.jpg"
-          alt="nike shoes"
+        <CardMedia
+          className={classes.media}
+          image={image}
+          title={name}
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary">
-            Running shoes
+            {productType}
           </Typography>
         </CardContent>
 
@@ -133,7 +133,7 @@ export default function Product() {
           <IconButton aria-label="Add to Cart" onClick="{addToBasket}">
             <AddShoppingCart fontSize="large" />
           </IconButton>
-          {Array(4)
+          {Array(rating)
             .fill()
             .map((_, i) => (
               <p>&#11088;</p>
@@ -151,7 +151,7 @@ export default function Product() {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>
-              Zapatillas de deporte específicas para correr
+              {description}
             </Typography>
           </CardContent>
         </Collapse>

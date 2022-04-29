@@ -1,21 +1,12 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-
  import { createTheme, ThemeProvider } from "@mui/material/styles";
  import { grey } from "@mui/material/colors";
  import { makeStyles } from "@mui/styles";
 import Product from "./Product";
+import products from '../product-data'
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
  const theme = createTheme({
    palette: {
@@ -33,40 +24,31 @@ const Item = styled(Paper)(({ theme }) => ({
  const useStyles = makeStyles({
    root: {
      flexGrow: 1,
-     marginBottom: "7rem",
-     color: "whitesmoke",
+     padding: theme.spacing(3),
    },
    
  });
 
 export default function Products() {
+
+  const classes = useStyles();
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Product />
+      <div className={classes.root}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            {
+              //Mapeo para iterar entre cada producto
+              products.map((product)=>(
+                 <Grid item xs={12} sm={6} md={4} lg={3}>
+                   <Product key={product.id} product={product}/>
+                 </Grid>
+                  ))
+            }
+            
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Product />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Product />
-          </Grid>
-          <Grid item xs={6} md={3}>
-            <Product />
-          </Grid>
-          <Grid item xs={6} md={3}>
-            <Product />
-          </Grid>
-          <Grid item xs={6} md={3}>
-            <Product />
-          </Grid>
-          <Grid item xs={6} md={3}>
-            <Product />
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </div>
     </ThemeProvider>
   );
 }
