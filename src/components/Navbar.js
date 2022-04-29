@@ -37,7 +37,7 @@ import { Badge } from "@mui/material";
    palette: {
      primary: {
        // Purple and green play nicely together.
-       main: grey[400],
+       main: grey[200],
      },
      secondary: {
        // This is green.A700 as hex.

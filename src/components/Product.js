@@ -73,6 +73,7 @@ const useStyles = makeStyles({
   },
   image: {
     marginRight: "10px",
+    height:"auto"
   },
 });
 
@@ -104,7 +105,7 @@ export default function Product({product:{id,name,productType,image,price,rating
 
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ maxWidth: 345, height: "100%" }}>
         <CardHeader
           action={
             <Typography
@@ -118,11 +119,7 @@ export default function Product({product:{id,name,productType,image,price,rating
           title={name}
           subheader="in stock"
         />
-        <CardMedia
-          className={classes.media}
-          image={image}
-          title={name}
-        />
+        <CardMedia className={classes.media} image={image} title={name} />
         <CardContent>
           <Typography variant="body2" color="textSecondary">
             {productType}
@@ -150,9 +147,7 @@ export default function Product({product:{id,name,productType,image,price,rating
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>
-              {description}
-            </Typography>
+            <Typography paragraph>{description}</Typography>
           </CardContent>
         </Collapse>
       </Card>

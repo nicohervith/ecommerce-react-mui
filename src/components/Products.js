@@ -21,13 +21,13 @@ import products from '../product-data'
    },
  });
 
- const useStyles = makeStyles({
+ const useStyles = makeStyles((theme)=>({
    root: {
      flexGrow: 1,
      padding: theme.spacing(3),
    },
    
- });
+ }));
 
 export default function Products() {
 
