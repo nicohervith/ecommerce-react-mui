@@ -10,6 +10,8 @@ import { grey } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 import { CardMedia } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useStateValue } from "../StateProvider";
+import { actionTypes } from "../reducer";
 
 const theme = createTheme({
   palette: {
@@ -50,28 +52,19 @@ export default function CheckOutCard({
   product: { id, name, productType, image, price, rating, description },
 }) {
   const classes = useStyles();
+  const [{ basket }, dispatch] = useStateValue();
 
-
-  /*
-  const addToBasket=()=>{
-    dispatch({
-      type:actionTypes.ADD_TO_BASKET,
-      item: {
-        id,
-        name,
-        productType,
-        image,
-        price,
-        rating,
-        description,
-
-      }
+  
+  const removeItem=()=> dispatch
+    ({
+      type:actionTypes.REMOVE_ITEM,
+      id,
     })
-  };*/
+  
 
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ maxWidth: 345 ,height:"100%"}}>
+      <Card sx={{ maxWidth: 345, height: "100%" }}>
         <CardHeader
           action={
             <Typography
@@ -96,7 +89,7 @@ export default function CheckOutCard({
               ))}
           </div>
           <IconButton>
-              <DeleteIcon fontSize="large"/>
+            <DeleteIcon fontSize="large" onClick={removeItem} />
           </IconButton>
         </CardActions>
       </Card>

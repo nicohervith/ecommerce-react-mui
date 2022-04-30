@@ -33,9 +33,9 @@ const Total = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
-        <h5>Total items: 3</h5>
-        <h5>{accounting.formatMoney(50, "€")}
-        </h5>
+        <h2>Total items: 3</h2>
+        <h2>{accounting.formatMoney(50, "€")}
+        </h2>
         <Button
           className={classes.button}
           variant="contained"

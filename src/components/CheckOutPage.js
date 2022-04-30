@@ -3,14 +3,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 import { Grid, Typography } from "@mui/material";
-import products from "../product-data";
-
-/*import {useStateValue} from "../StateProvider";*/
-
+import {useStateValue} from "../StateProvider";
 import CheckOutCard from './CheckOutCard';
-/*import Total from "./Total";*/
-import Product from "./Product";
 import Total from "./Total";
+import { Link } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -36,18 +32,18 @@ const useStyles = makeStyles((theme)=>({
 
 const CheckOutPage = () => {
      const classes = useStyles();
-    /* const[{basket},dispatch]=useStateValue();
-*/
+    const[{basket},dispatch]=useStateValue();
+
      function FormRow(){
        return (
-          <React.Fragment>
-                {products?.map((item)=>(
-                  <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CheckOutCard key={item.id} product={item}/>
-                  </Grid>
-                ))}
-          </React.Fragment>  
-  )
+         <React.Fragment>
+           {basket?.map((item) => (
+             <Grid item xs={12} sm={8} md={6} lg={4}>
+                 <CheckOutCard key={item.id} product={item} />
+             </Grid>
+           ))}
+         </React.Fragment>
+       );
 }
 
 return (

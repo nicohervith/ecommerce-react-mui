@@ -5,14 +5,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import styled from "@emotion/styled";
 import { ShoppingCart } from "@mui/icons-material";
 import { Badge } from "@mui/material";
 
  import { createTheme, ThemeProvider } from "@mui/material/styles";
  import { grey } from "@mui/material/colors";
  import { makeStyles } from "@mui/styles";
+import { Link } from "react-router-dom";
+import { useStateValue } from "../StateProvider";
 
 /*
  const  useStyles = makeStyles((theme) =>({
@@ -77,25 +77,28 @@ export default function Navbar(props) {
 /*
     const [expanded, setExpanded] = React.useState(false);
 */
+ const [{ basket }, dispatch] = useStateValue();
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Logo_TV_2015.png/50px-Logo_TV_2015.png"
-                  alt="logo"
-                  className={classes.image}
-                />
-              </IconButton>
+              <Link to="/">
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Logo_TV_2015.png/50px-Logo_TV_2015.png"
+                    alt="logo"
+                    className={classes.image}
+                  />
+                </IconButton>
+              </Link>
 
               <div className={classes.grow} />
               <Typography variant="h6" color="textPrimary" component="p">
@@ -103,13 +106,18 @@ export default function Navbar(props) {
               </Typography>
               <div className={classes.button}>
                 <Button variant="outlined" color="inherit">
-                    <strong>Sign In</strong>
+                  <strong>Sign In</strong>
                 </Button>
-                <IconButton aria-label="show cart items" color="inherit">
-                  <Badge badgeContent={2} color="secondary">
-                    <ShoppingCart fontSize="large" color="inherit" />
-                  </Badge>
-                </IconButton>
+
+                    <Link to="/shoppingcart">
+                        <IconButton aria-label="show cart items" color="inherit">
+                          <Badge badgeContent={basket?.length} color="secondary">
+                              <ShoppingCart fontSize="large" color="inherit" />
+                          </Badge>
+                        </IconButton>
+                    </Link>
+
+
               </div>
             </Toolbar>
           </AppBar>
@@ -119,31 +127,3 @@ export default function Navbar(props) {
   );
 };
 
-
-
-/*
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  },),
-  root: {
-    flexGrow: 1,
-    marginBottom: "7rem",
-  },
-
-  grow: {
-    flexGrow: 1,
-  },
-  button: {
-    marginLeft: theme.spacing(2),
-  },
-  image: {
-    marginRight: "10px",
-  },
-}));
-*/

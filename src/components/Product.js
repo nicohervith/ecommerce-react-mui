@@ -2,7 +2,6 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
@@ -11,11 +10,14 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import accounting from "accounting";
 import { AddShoppingCart } from "@mui/icons-material";
-
  import { createTheme, ThemeProvider } from "@mui/material/styles";
  import { grey } from "@mui/material/colors";
  import { makeStyles } from "@mui/styles";
 import { CardMedia } from "@mui/material";
+import {actionTypes} from '../reducer';
+import {useStateValue} from '../StateProvider';
+
+
 
 
 const ExpandMore = styled((props) => {
@@ -82,14 +84,16 @@ export default function Product({product:{id,name,productType,image,price,rating
 
   const [expanded, setExpanded] = React.useState(false);
 
+  const [{basket},dispatch] = useStateValue();
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  /*
+  
   const addToBasket=()=>{
     dispatch({
-      type:actionTypes.ADD_TO_BASKET,
+      type: actionTypes.ADD_TO_BASKET,
       item: {
         id,
         name,
@@ -98,10 +102,9 @@ export default function Product({product:{id,name,productType,image,price,rating
         price,
         rating,
         description,
-
-      }
-    })
-  };*/
+      },
+    });
+  }; 
 
   return (
     <ThemeProvider theme={theme}>
@@ -127,7 +130,7 @@ export default function Product({product:{id,name,productType,image,price,rating
         </CardContent>
 
         <CardActions disableSpacing>
-          <IconButton aria-label="Add to Cart" onClick="{addToBasket}">
+          <IconButton aria-label="Add to Cart" onClick={addToBasket}>
             <AddShoppingCart fontSize="large" />
           </IconButton>
           {Array(rating)
