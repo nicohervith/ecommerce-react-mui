@@ -7,12 +7,13 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { ShoppingCart } from "@mui/icons-material";
 import { Badge } from "@mui/material";
-
  import { createTheme, ThemeProvider } from "@mui/material/styles";
  import { grey } from "@mui/material/colors";
  import { makeStyles } from "@mui/styles";
-import { Link } from "react-router-dom";
-import { useStateValue } from "../StateProvider";
+import { Link, useNavigate } from "react-router-dom";
+import { useStateValue } from "../../StateProvider";
+import { auth } from "../../firebase";
+import { actionTypes } from "../../reducer";
 
 /*
  const  useStyles = makeStyles((theme) =>({
@@ -77,7 +78,24 @@ export default function Navbar(props) {
 /*
     const [expanded, setExpanded] = React.useState(false);
 */
- const [{ basket }, dispatch] = useStateValue();
+ const [{ basket,user }, dispatch] = useStateValue();
+ const navigate = useNavigate();
+
+const handleAuth = () =>{
+  if (user){
+    auth.signOut();
+    dispatch({
+      type: actionTypes.EMPTY_BASKET,
+      basket: [],
+    })
+     dispatch({
+       type: actionTypes.SET_USER,
+       user: null,
+     });
+    navigate('/');
+  }
+}
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
@@ -102,12 +120,16 @@ export default function Navbar(props) {
 
               <div className={classes.grow} />
               <Typography variant="h6" color="textPrimary" component="p">
-                <b>Hello Guest</b>
+                <b>Hello  {user ? 
+                   user.email 
+                   : " Guest"
+                   }</b>
               </Typography>
               <div className={classes.button}>
                 <Link to="/signin">
-                  <Button variant="outlined" color="inherit">
-                    <strong>Sign In</strong>
+                  <Button onClick={handleAuth}
+                  variant="outlined" color="inherit">
+                    <strong>{user ? " Sign Out" : " Sign In"}</strong>
                   </Button>
                 </Link>
 

@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import CheckOutCard from "./CheckOutCard";
-import CheckOutPage from "./CheckOutPage";
+import CheckOutCard from "./Pages/CheckOutCard";
+import CheckOutPage from "./Pages/CheckOutPage";
 import PageLink from "./PageLink";
-import Products from "./Products";
-import SignIn from "./Signin";
-import SignUp from "./Signup";
+import Products from "./Pages/Products";
+import SignIn from "./Pages/Signin";
+import SignUp from "./Pages/Signup";
 
 
 const PageRoutes = () => {

@@ -4,7 +4,7 @@ const products = [
     name: "Shoes",
     productType: "Running shoes",
     price: 50,
-    rating: 4,
+    rating: 3,
     image:
       "https://www.runningcorrer.com.ar/wprunning/wp-content/uploads/2020/12/nike-air-zoom-vomero-15-zapatillas-de-running-3.jpg",
     description: "Nike air is our iconic innnovation",
@@ -43,13 +43,46 @@ const products = [
   },
   {
     id: 5,
-    name: "Shoes",
-    productType: "Running shoes",
-    price: 48,
+    name: "Botines Nike",
+    productType: "Mercurial Vapor 13 Elite FG",
+    price: 65,
+    rating: 5,
+    image:
+      "https://www.stockcenter.com.ar/on/demandware.static/-/Sites-dabra-catalog/default/dwea3cdd29/products/NI_AQ4176-906/NI_AQ4176-906-1.JPG",
+    description:
+      "The Nike Mercurial Vapor 13 Elite FG Cleat adds a Nike Aerowtrac zone in the forefoot and a slightly stiffer chassis to help boost traction.",
+  },
+  {
+    id: 6,
+    name: "Hair Iron",
+    productType: "Mercurial Vapor 13 Elite FG",
+    price: 39.25,
+    rating: 2,
+    image:
+      "https://www.sumaelectrohogar.com.ar/8323-large_default/plancha-pelo-gama-bella-ceramic-shine.jpg",
+    description:
+      "The flat iron you have to feel to believe! The Jose Eber Vibrating 1,5 Flat Iron combines heat and vibration technology for friction-free, fluid-like glide.",
+  },
+  {
+    id: 7,
+    name: "Pc gamer",
+    productType: "Amd A6 7480 4ghz",
+    price: 987.75,
     rating: 4,
     image:
-      "https://www.runningcorrer.com.ar/wprunning/wp-content/uploads/2020/12/nike-air-zoom-vomero-15-zapatillas-de-running-3.jpg",
-    description: "Nike air is our iconic innnovation",
+      "https://www.soscomputacion.com.ar/18698-thickbox_default/gabinete-pc-gamer-rgb-acrilico-sp-cg-9900-ultra-gaming-luces-led-usb-30-loulan-sin-fuente-no-incluye-coolers.jpg",
+    description: "MICRO: INTEL CELERON G5905 10MA GEN Dual Core. ",
+  },
+  {
+    id: 8,
+    name: "Blender",
+    productType: "NutriBullet ZNBF30400Z Blender 1200 Watts",
+    price: 45,
+    rating: 3,
+    image:
+      "https://image.shutterstock.com/image-photo/silver-modern-blender-strawberries-fruit-260nw-2023938077.jpg",
+    description:
+      "NutriBullet blender is the ultimate cooking companion, with multiple speeds blend up any recipe, both quickly and precisely.",
   },
 ];
 

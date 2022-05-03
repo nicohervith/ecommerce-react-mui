@@ -14,8 +14,8 @@ import { AddShoppingCart } from "@mui/icons-material";
  import { grey } from "@mui/material/colors";
  import { makeStyles } from "@mui/styles";
 import { CardMedia } from "@mui/material";
-import {actionTypes} from '../reducer';
-import {useStateValue} from '../StateProvider';
+import {actionTypes} from '../../reducer';
+import {useStateValue} from '../../StateProvider';
 
 
 

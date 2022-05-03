@@ -10,8 +10,8 @@ import { grey } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 import { CardMedia } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useStateValue } from "../StateProvider";
-import { actionTypes } from "../reducer";
+import { useStateValue } from "../../StateProvider";
+import { actionTypes } from "../../reducer";
 
 const theme = createTheme({
   palette: {

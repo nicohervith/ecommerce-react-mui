@@ -1,9 +1,7 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
-
-
-const firebaseConfig = firebase.initializeApp({
+const app = firebase.initializeApp({
   apiKey: "AIzaSyD0iPBe-toX9RraUCAcoHBNJM4u8abVdJY",
   authDomain: "ecommerce-first-3eb27.firebaseapp.com",
   projectId: "ecommerce-first-3eb27",
@@ -12,7 +10,4 @@ const firebaseConfig = firebase.initializeApp({
   appId: "1:252113302376:web:e9386859d4fcd4a3641cdd",
 });
 
-
-const auth = firebase.auth()
-export default firebaseConfig;
-export { auth };
+export default app;

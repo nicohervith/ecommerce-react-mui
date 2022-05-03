@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
  import { grey } from "@mui/material/colors";
  import { makeStyles } from "@mui/styles";
 import Product from "./Product";
-import products from '../product-data'
+import products from '../../product-data'
 
 
  const theme = createTheme({

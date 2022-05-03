@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 import { Grid, Typography } from "@mui/material";
-import {useStateValue} from "../StateProvider";
+import {useStateValue} from "../../StateProvider";
 import CheckOutCard from './CheckOutCard';
 import Total from "./Total";
 import { Link } from "react-router-dom";

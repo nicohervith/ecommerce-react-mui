@@ -4,8 +4,8 @@ import accounting from 'accounting'
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import {getBasketTotal} from "../reducer";
-import { useStateValue } from "../StateProvider";
+import {getBasketTotal} from "../../reducer";
+import { useStateValue } from "../../StateProvider";
 
 const theme = createTheme({
   palette: {
