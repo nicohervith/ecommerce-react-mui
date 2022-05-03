@@ -105,19 +105,19 @@ export default function Navbar(props) {
                 <b>Hello Guest</b>
               </Typography>
               <div className={classes.button}>
-                <Button variant="outlined" color="inherit">
-                  <strong>Sign In</strong>
-                </Button>
+                <Link to="/signin">
+                  <Button variant="outlined" color="inherit">
+                    <strong>Sign In</strong>
+                  </Button>
+                </Link>
 
-                    <Link to="/shoppingcart">
-                        <IconButton aria-label="show cart items" color="inherit">
-                          <Badge badgeContent={basket?.length} color="secondary">
-                              <ShoppingCart fontSize="large" color="inherit" />
-                          </Badge>
-                        </IconButton>
-                    </Link>
-
-
+                <Link to="/shoppingcart">
+                  <IconButton aria-label="show cart items" color="inherit">
+                    <Badge badgeContent={basket?.length} color="secondary">
+                      <ShoppingCart fontSize="large" color="inherit" />
+                    </Badge>
+                  </IconButton>
+                </Link>
               </div>
             </Toolbar>
           </AppBar>

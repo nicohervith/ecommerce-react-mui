@@ -4,6 +4,8 @@ import accounting from 'accounting'
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
+import {getBasketTotal} from "../reducer";
+import { useStateValue } from "../StateProvider";
 
 const theme = createTheme({
   palette: {
@@ -29,13 +31,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Total = () => {
   const classes = useStyles();
+   const [{ basket }, dispatch] = useStateValue();
   
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
-        <h2>Total items: 3</h2>
-        <h2>{accounting.formatMoney(50, "€")}
-        </h2>
+        <h2>Total items: {basket?.length}</h2>
+        <h2>{accounting.formatMoney(getBasketTotal(basket), "€")}</h2>
+
         <Button
           className={classes.button}
           variant="contained"
