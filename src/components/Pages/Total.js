@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import {getBasketTotal} from "../../reducer";
 import { useStateValue } from "../../StateProvider";
+import { Link } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -39,13 +40,15 @@ const Total = () => {
         <h2>Total items: {basket?.length}</h2>
         <h2>{accounting.formatMoney(getBasketTotal(basket), "€")}</h2>
 
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="secondary"
-        >
-          Check out
-        </Button>
+        <Link to="/checkout" style={{ textDecoration: "none" }}>
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="secondary"
+          >
+            Check out
+          </Button>
+        </Link>
       </div>
     </ThemeProvider>
   );

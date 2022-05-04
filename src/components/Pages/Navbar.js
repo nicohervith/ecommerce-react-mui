@@ -102,7 +102,7 @@ const handleAuth = () =>{
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
-              <Link to="/">
+              <Link to="/" style={{ textDecoration: "none" }}>
                 <IconButton
                   size="large"
                   edge="start"
@@ -120,15 +120,15 @@ const handleAuth = () =>{
 
               <div className={classes.grow} />
               <Typography variant="h6" color="textPrimary" component="p">
-                <b>Hello  {user ? 
-                   user.email 
-                   : " Guest"
-                   }</b>
+                <b>Hello {user ? user.email : " Guest"}</b>
               </Typography>
               <div className={classes.button}>
-                <Link to="/signin">
-                  <Button onClick={handleAuth}
-                  variant="outlined" color="inherit">
+                <Link to="/signin" style={{ textDecoration: "none" }}>
+                  <Button
+                    onClick={handleAuth}
+                    variant="outlined"
+                    color="inherit"
+                  >
                     <strong>{user ? " Sign Out" : " Sign In"}</strong>
                   </Button>
                 </Link>
