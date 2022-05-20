@@ -1,3 +1,4 @@
+import coffeMaker from '../src/assets/images/coffeMaker.jpg';
 const products = [
   {
     id: 1,
@@ -11,14 +12,14 @@ const products = [
   },
   {
     id: 2,
-    name: "Macbook",
-    productType: "Apple Mcbook",
+    name: "Notebook HP",
+    productType: "HP 15 EF2126WM / Ryzen 5 5500U",
     price: 1000,
     rating: 4,
     image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3xVWAPbXE8hTXEXaexoTTD9pWzVemzl131w&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSPgLQUMaByHi9dQQzOzUizG-1eJypieIJ0A&usqp=CAU",
     description:
-      "Apple MacBook Pro is a macOS laptop with a 13.30-inch display",
+      "Product details of HP 15 EF2126WM / Ryzen 5 5500U/8GB RAM / 256GB SSD /15.6",
   },
   {
     id: 3,
@@ -27,23 +28,24 @@ const products = [
     price: 28,
     rating: 3,
     image:
-      "https://cdn-abhgc.nitrocdn.com/tyJLQPlyhBXItjeLAyrrLplRUFFlgsyP/assets/static/optimized/rev-1793bc8/wp-content/uploads/2021/12/Mr-Coffee-12-Cup-Coffee-Maker.jpg",
+      "https://www.picclickimg.com/d/l400/pict/202629889429_/Filter-Coffee-Maker-Machine-Instant-Anti-Drip-12-Cups.jpg",
     description:
       "Coffeemakers or coffee machines are cookin appliances used to brew coffee",
   },
   {
     id: 4,
     name: "Sweater",
-    productType: "Xbox Christmas Sweater",
+    productType: "Sweater",
     price: 42,
     rating: 5,
     image:
-      "https://numskull.com/wp-content/uploads/XBOX-2021-Xmas-Jumper-1.jpg",
-    description: "PC or Mac. Pepsi or Coke. Xbox or that other console.",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7RRvabBhLISI6kdtH8tAPYBD5PEPo2qtqPA&usqp=CAU",
+    description:
+      " classic fair isle adds to the heritage appeal of our ragg wool crewneck sweater. Crafted from premium lambswool and designed stitch by stitch with time-honored styling straight from our archives.",
   },
   {
     id: 5,
-    name: "Botines Nike",
+    name: "Football boots",
     productType: "Mercurial Vapor 13 Elite FG",
     price: 65,
     rating: 5,
