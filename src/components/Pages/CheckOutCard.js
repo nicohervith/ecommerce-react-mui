@@ -72,7 +72,7 @@ export default function CheckOutCard({
               variant="h5"
               color="textSecondary"
             >
-              {accounting.formatMoney(price, "€")}
+              {accounting.formatMoney(price, "USD $")}
             </Typography>
           }
           title={name}
