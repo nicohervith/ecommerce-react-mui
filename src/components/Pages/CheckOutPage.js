@@ -1,25 +1,14 @@
 import * as React from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { grey } from "@mui/material/colors";
-import { makeStyles } from "@mui/styles";
-import { Grid, Typography } from "@mui/material";
+
+import { grey } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core/styles";
+import { Grid, Typography } from "@material-ui/core";
 import {useStateValue} from "../../StateProvider";
 import CheckOutCard from './CheckOutCard';
 import Total from "./Total";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      // Purple and green play nicely together.
-      main: grey[200],
-    },
-    secondary: {
-      // This is green.A700 as hex.
-      main: "#f44336",
-    },
-  },
-});
+
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -47,7 +36,7 @@ const CheckOutPage = () => {
 }
 
 return (
-  <ThemeProvider theme={theme}>
+
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -67,7 +56,7 @@ return (
         </Grid>
       </Grid>
     </div>
-  </ThemeProvider>
+
 );
 }
 

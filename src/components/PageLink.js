@@ -6,7 +6,7 @@ const PageLink = () => {
       <ul>
         <Link to="/"></Link>
         <Link to="/shoppingcart"></Link>
-        <Link to="/checkout"></Link>
+        <Link to="/checkout-page"></Link>
         <Link to="/signin"></Link>
         <Link to="/signup"></Link>
       </ul>

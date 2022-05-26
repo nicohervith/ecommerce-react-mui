@@ -1,21 +1,13 @@
 
 import React from 'react'
 import accounting from 'accounting'
-import { Button } from '@mui/material';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
+import { Button } from "@material-ui/core/";
+import { makeStyles } from "@material-ui/core/styles";
 import {getBasketTotal} from "../../reducer";
 import { useStateValue } from "../../StateProvider";
 import { Link } from 'react-router-dom';
 
-const theme = createTheme({
-  palette: {
-    secondary: {
-      // This is green.A700 as hex.
-      main: "#f44336",
-    },
-  },
-});
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,12 +27,12 @@ const Total = () => {
    const [{ basket }, dispatch] = useStateValue();
   
   return (
-    <ThemeProvider theme={theme}>
+
       <div className={classes.root}>
         <h2>Total items: {basket?.length}</h2>
-        <h2>{accounting.formatMoney(getBasketTotal(basket), "€")}</h2>
+        <h2>{accounting.formatMoney(getBasketTotal(basket), "USD $")}</h2>
 
-        <Link to="/checkout" style={{ textDecoration: "none" }}>
+        <Link to="/checkout-page" style={{ textDecoration: "none" }}>
           <Button
             className={classes.button}
             variant="contained"
@@ -50,7 +42,7 @@ const Total = () => {
           </Button>
         </Link>
       </div>
-    </ThemeProvider>
+
   );
 }
 

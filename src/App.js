@@ -1,5 +1,5 @@
 import './App.css';
-import Navbar from "./components/Pages/Navbar";
+import Navbar from "./components/Pages/navbar/Navbar";
 import PageRoutes from './components/PageRoutes';
 import {useEffect} from 'react'
 import {auth} from './firebase'

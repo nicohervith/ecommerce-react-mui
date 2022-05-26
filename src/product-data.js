@@ -12,7 +12,7 @@ const products = [
   },
   {
     id: 2,
-    name: "Notebook HP",
+    name: "Notebook",
     productType: "HP 15 EF2126WM / Ryzen 5 5500U",
     price: 1000,
     rating: 4,
@@ -78,7 +78,7 @@ const products = [
   {
     id: 8,
     name: "Blender",
-    productType: "NutriBullet ZNBF30400Z Blender 1200 Watts",
+    productType: "NutriBullet ZNBF30400Z Blender 1200W",
     price: 45,
     rating: 3,
     image:

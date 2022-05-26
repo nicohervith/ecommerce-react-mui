@@ -1,21 +1,20 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import accounting from "accounting";
-import { AddShoppingCart } from "@mui/icons-material";
- import { createTheme, ThemeProvider } from "@mui/material/styles";
- import { grey } from "@mui/material/colors";
- import { makeStyles } from "@mui/styles";
-import { CardMedia } from "@mui/material";
-import {actionTypes} from '../../reducer';
-import {useStateValue} from '../../StateProvider';
+import { AddShoppingCart } from "@material-ui/icons";
+ import { grey } from "@material-ui/core/colors";
+ import { makeStyles } from "@material-ui/core/styles";
+import CardMedia from "@material-ui/core/CardMedia";
+import {actionTypes} from '../../../reducer';
+import {useStateValue} from '../../../StateProvider';
 
 
 
@@ -51,21 +50,10 @@ expandOpen:{
 
 }));
 
- const theme = createTheme({
-   palette: {
-     primary: {
-       // Purple and green play nicely together.
-       main: grey[400],
-     },
-     secondary: {
-       // This is green.A700 as hex.
-       main: "#f44336",
-     },
-   },
- });
 
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles((theme)=>({
   action: {
     marginTop:"1rem",
   },
@@ -77,7 +65,7 @@ const useStyles = makeStyles({
     marginRight: "10px",
     height:"auto"
   },
-});
+}));
 
 export default function Product({product:{id,name,productType,image,price,rating,description}}) {
   const classes = useStyles();
@@ -107,7 +95,7 @@ export default function Product({product:{id,name,productType,image,price,rating
   }; 
 
   return (
-    <ThemeProvider theme={theme}>
+
       <Card sx={{ maxWidth: 345, height: "100%" }}>
         <CardHeader
           action={
@@ -154,7 +142,7 @@ export default function Product({product:{id,name,productType,image,price,rating
           </CardContent>
         </Collapse>
       </Card>
-    </ThemeProvider>
+
   );
 }
 

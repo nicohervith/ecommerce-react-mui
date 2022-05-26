@@ -1,19 +1,18 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import { ShoppingCart } from "@mui/icons-material";
-import { Badge } from "@mui/material";
- import { createTheme, ThemeProvider } from "@mui/material/styles";
- import { grey } from "@mui/material/colors";
- import { makeStyles } from "@mui/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import { ShoppingCart } from "@material-ui/icons";
+import { Badge , Button} from "@material-ui/core";
+
+ import { grey } from "@material-ui/core/colors";
+ import { makeStyles } from "@material-ui/core/styles";
 import { Link, useNavigate } from "react-router-dom";
-import { useStateValue } from "../../StateProvider";
-import { auth } from "../../firebase";
-import { actionTypes } from "../../reducer";
+import { useStateValue } from "../../../StateProvider";
+import { auth } from "../../../firebase";
+import { actionTypes } from "../../../reducer";
 
 /*
  const  useStyles = makeStyles((theme) =>({
@@ -34,20 +33,9 @@ import { actionTypes } from "../../reducer";
  }));
 */
 
- const theme = createTheme({
-   palette: {
-     primary: {
-       // Purple and green play nicely together.
-       main: grey[200],
-     },
-     secondary: {
-       // This is green.A700 as hex.
-       main: "#f44336",
-     },
-   },
- });
 
- const useStyles = makeStyles({
+
+ const useStyles = makeStyles((theme)=>({
    
    root: {
      flexGrow: 1,
@@ -67,7 +55,7 @@ import { actionTypes } from "../../reducer";
    image: {
      marginRight: "10px",
    },
- });
+ }));
 
 
 
@@ -97,14 +85,13 @@ const handleAuth = () =>{
 }
 
   return (
-    <ThemeProvider theme={theme}>
       <div className={classes.root}>
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
               <Link to="/" style={{ textDecoration: "none" }}>
                 <IconButton
-                  size="large"
+                  size="medium"
                   edge="start"
                   color="inherit"
                   aria-label="menu"
@@ -145,7 +132,7 @@ const handleAuth = () =>{
           </AppBar>
         </Box>
       </div>
-    </ThemeProvider>
+
   );
 };
 

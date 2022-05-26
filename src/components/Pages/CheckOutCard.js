@@ -1,30 +1,19 @@
 import * as React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardActions from "@material-ui/core/CardActions";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
 import accounting from "accounting";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { grey } from "@mui/material/colors";
-import { makeStyles } from "@mui/styles";
-import { CardMedia } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+import { grey } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core/styles";
+import { CardMedia } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { useStateValue } from "../../StateProvider";
 import { actionTypes } from "../../reducer";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      // Purple and green play nicely together.
-      main: grey[400],
-    },
-    secondary: {
-      // This is green.A700 as hex.
-      main: "#f44336",
-    },
-  },
-});
+
 
 const useStyles = makeStyles((theme)=>({
   action: {
@@ -63,7 +52,6 @@ export default function CheckOutCard({
   
 
   return (
-    <ThemeProvider theme={theme}>
       <Card sx={{ maxWidth: 345, height: "100%" }}>
         <CardHeader
           action={
@@ -93,6 +81,5 @@ export default function CheckOutCard({
           </IconButton>
         </CardActions>
       </Card>
-    </ThemeProvider>
   );
 }

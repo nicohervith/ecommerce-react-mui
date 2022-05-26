@@ -1,39 +1,27 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
- import { createTheme, ThemeProvider } from "@mui/material/styles";
- import { grey } from "@mui/material/colors";
- import { makeStyles } from "@mui/styles";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+
+ import { grey } from "@material-ui/core/colors";
+ import { makeStyles } from "@material-ui/core/styles";
 import Product from "./Product";
-import products from '../../product-data'
+import products from '../../../product-data'
 
 
- const theme = createTheme({
-   palette: {
-     primary: {
-       // Purple and green play nicely together.
-       main: grey[400],
-     },
-     secondary: {
-       // This is green.A700 as hex.
-       main: "#f44336",
-     },
-   },
- });
 
- const useStyles = makeStyles({
+ const useStyles = makeStyles((theme)=>({
    root: {
      flexGrow: 1,
      padding: theme.spacing(3),
    },
    
- });
+ }));
 
 export default function Products() {
 
   const classes = useStyles();
   return (
-    <ThemeProvider theme={theme}>
+
       <div className={classes.root}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
@@ -49,6 +37,6 @@ export default function Products() {
           </Grid>
         </Box>
       </div>
-    </ThemeProvider>
+
   );
 }
