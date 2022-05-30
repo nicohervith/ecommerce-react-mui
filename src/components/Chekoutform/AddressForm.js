@@ -2,9 +2,13 @@ import { Button, Grid, Typography } from '@material-ui/core'
 import {useForm, FormProvider} from "react-hook-form";
 import { Link } from 'react-router-dom';
 import AddressInput from './AddressInput';
+import { useStateValue } from "../../StateProvider";
+import { actionTypes } from "../../reducer";
 
-const AddressForm = () => {
+
+const AddressForm = ({nextStep}) => {
   const methods = useForm();
+  const [{shippingData}, dispatch] = useStateValue();
 
   return (
     <>
@@ -12,7 +16,18 @@ const AddressForm = () => {
         Shipping address
       </Typography>
       <FormProvider {...methods}>
-        <form>
+        <form
+          onSubmit={methods.handleSubmit(data => {
+            console.log(data);
+            dispatch({
+              type:actionTypes.SET_SHIPPINGDATA,
+              shippingData: data,
+              //El shippingData lo relleno con los datos de data
+            });
+            nextStep();
+
+          })}
+        >
           <Grid container spacing={3}>
             <AddressInput required name="firstName" label="First Name" />
             <AddressInput required name="lastName" label="Last Name" />
@@ -22,10 +37,13 @@ const AddressForm = () => {
             <AddressInput required name="postCode" label="Post Code " />
           </Grid>
 
-          <div style={{display: "flex", justifyContent:"space-between", marginTop:"1rem"}}>
-            <Button type="submit" variant="contained" color="primary">
-              Next
-            </Button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "1rem",
+            }}
+          >
             <Button
               component={Link}
               to="/shoppingcart"
@@ -33,6 +51,10 @@ const AddressForm = () => {
               color="primary"
             >
               Back to shopping cart
+            </Button>
+            <Button 
+            type="submit" variant="contained" color="primary">
+              Next
             </Button>
           </div>
         </form>

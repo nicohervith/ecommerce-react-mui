@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { ShoppingCart } from "@material-ui/icons";
 import { Badge , Button} from "@material-ui/core";
-
  import { grey } from "@material-ui/core/colors";
  import { makeStyles } from "@material-ui/core/styles";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,37 +13,17 @@ import { useStateValue } from "../../../StateProvider";
 import { auth } from "../../../firebase";
 import { actionTypes } from "../../../reducer";
 
-/*
- const  useStyles = makeStyles((theme) =>({
-   root:{
-     flexGrow:1,
-     marginBottom:"7rem",
-   },
-   appBar:{
-    backgroundColor: "whitesmoke",
-    boxShadow:"none",
-   },
-     grow: {
-    flexGrow: 1,
-  },
-  image: {
-    marginRight: "10px",
-  },
- }));
-*/
-
-
-
  const useStyles = makeStyles((theme)=>({
    
    root: {
      flexGrow: 1,
-     marginBottom: "7rem",
-     color: "whitesmoke",
+     marginBottom: "4rem",
+     
    },
    appBar: {
      backgroundColor: "whitesmoke",
      boxShadow: "none",
+     height:"60px",
    },
    grow: {
      flexGrow: 1,
@@ -53,14 +32,13 @@ import { actionTypes } from "../../../reducer";
      marginLeft:theme.spacing(2)
    },
    image: {
-     marginRight: "10px",
+     marginRight: "5px",
    },
  }));
 
 
 
 export default function Navbar(props) {
-
 
    const classes = useStyles();
 /*
@@ -85,54 +63,49 @@ const handleAuth = () =>{
 }
 
   return (
-      <div className={classes.root}>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="fixed" className={classes.appBar}>
-            <Toolbar>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <IconButton
-                  size="medium"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{ mr: 2 }}
-                >
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Logo_TV_2015.png/50px-Logo_TV_2015.png"
-                    alt="logo"
-                    className={classes.image}
-                  />
-                </IconButton>
+    <div className={classes.root}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <IconButton
+                size="medium"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Logo_TV_2015.png/50px-Logo_TV_2015.png"
+                  alt="logo"
+                  className={classes.image}
+                />
+              </IconButton>
+            </Link>
+
+            <div className={classes.grow} />
+            <Typography variant="h6" color="textPrimary" component="p">
+              <b>Hello {user ? user.email : " Guest"}</b>
+            </Typography>
+            <div className={classes.button}>
+              <Link to="/signin" style={{ textDecoration: "none" }}>
+                <Button onClick={handleAuth} variant="outlined" >
+                  <strong>{user ? " Sign Out" : " Sign In"}</strong>
+                </Button>
               </Link>
 
-              <div className={classes.grow} />
-              <Typography variant="h6" color="textPrimary" component="p">
-                <b>Hello {user ? user.email : " Guest"}</b>
-              </Typography>
-              <div className={classes.button}>
-                <Link to="/signin" style={{ textDecoration: "none" }}>
-                  <Button
-                    onClick={handleAuth}
-                    variant="outlined"
-                    color="inherit"
-                  >
-                    <strong>{user ? " Sign Out" : " Sign In"}</strong>
-                  </Button>
-                </Link>
-
-                <Link to="/shoppingcart">
-                  <IconButton aria-label="show cart items" color="inherit">
-                    <Badge badgeContent={basket?.length} color="secondary">
-                      <ShoppingCart fontSize="large" color="inherit" />
-                    </Badge>
-                  </IconButton>
-                </Link>
-              </div>
-            </Toolbar>
-          </AppBar>
-        </Box>
-      </div>
-
+              <Link to="/shoppingcart">
+                <IconButton aria-label="show cart items" color="inherit">
+                  <Badge badgeContent={basket?.length} color="secondary">
+                    <ShoppingCart fontSize="large" color="primary" />
+                  </Badge>
+                </IconButton>
+              </Link>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </div>
   );
 };
 

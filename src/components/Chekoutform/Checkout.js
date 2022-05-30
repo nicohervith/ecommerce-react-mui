@@ -14,7 +14,7 @@ const Checkout = () => {
 
    const backStep = () => setActivestep((prevActivestep) => prevActivestep - 1);
 
-   const Form = () => activeStep === 0 ? <AddressForm/> : <PaymentForm/>
+   const Form = () => activeStep === 0 ? <AddressForm nextStep={nextStep}/> : <PaymentForm/>
 
   return (
  
@@ -23,7 +23,7 @@ const Checkout = () => {
           <Typography component="h1" variant="h4" align="center">
             Checkout
           </Typography>
-          <Stepper activeStep={/*activeStep*/0} className={classes.stepper}>
+          <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((step) => (
               <Step key={step}>
                 <StepLabel>{step}</StepLabel>

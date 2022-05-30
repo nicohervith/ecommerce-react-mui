@@ -51,8 +51,6 @@ expandOpen:{
 }));
 
 
-
-
 const useStyles = makeStyles((theme)=>({
   action: {
     marginTop:"1rem",
@@ -64,6 +62,7 @@ const useStyles = makeStyles((theme)=>({
   image: {
     marginRight: "10px",
     height:"auto"
+
   },
 }));
 
@@ -96,12 +95,12 @@ export default function Product({product:{id,name,productType,image,price,rating
 
   return (
 
-      <Card sx={{ maxWidth: 345, height: "100%" }}>
+      <Card sx={{ maxWidth: 345, height: "100%" }} >
         <CardHeader
           action={
             <Typography
               className={classes.action}
-              variant="h5"
+              variant="h6"
               color="textSecondary"
             >
               {accounting.formatMoney(price, "USD $")}
@@ -110,7 +109,7 @@ export default function Product({product:{id,name,productType,image,price,rating
           title={name}
           subheader="in stock"
         />
-        <CardMedia className={classes.media} image={image} title={name} />
+        <CardMedia className={classes.media} image={image} title={name}  />
         <CardContent>
           <Typography variant="body2" color="textSecondary">
             {productType}
