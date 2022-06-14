@@ -20,7 +20,6 @@ app.use(express.json());
 
 app.post("/api/checkout", async(req,res)=>{
   console.log(req.body)
-  res.send("Recibido");
   const { id, amount } = req.body;
 
   try{

@@ -1,6 +1,4 @@
 import * as React from "react";
-
-import { grey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
 import {useStateValue} from "../../StateProvider";

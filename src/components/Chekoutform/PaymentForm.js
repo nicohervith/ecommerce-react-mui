@@ -1,13 +1,14 @@
-import { Button, Divider, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Divider, Typography } from '@material-ui/core'
 import React from 'react'
 import Review from './Review'
 import {Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js';
 import {accounting} from 'accounting';
-import { getBasketTotal } from '../../reducer';
+import { actionTypes, getBasketTotal } from '../../reducer';
 import { useStateValue } from '../../StateProvider';
 import { Link } from "react-router-dom";
 import axios from "axios"
+import { useState } from 'react';
 
 const stripePromise = loadStripe(
   "pk_test_51LAIJWIlL7CBuxtZcmAPD1sA5suFZEldPhSnwUIeq7COSXRCTuz4V19Yhp1Ziqy202co2iWzqg3jnft25AzK23dV00IAPmkVVO"
@@ -39,7 +40,8 @@ const CARD_ELEMENT_OPTIONS = {
 
 const CheckoutForm = ({ nextStep, backStep }) => {
 
-  const [{ basket }, dispatch] = useStateValue();
+  const [{ basket , paymentMessage }, dispatch] = useStateValue();
+  const [loading, setLoading] = useState(false);
   
   const stripe = useStripe();
   const elements = useElements();
@@ -53,8 +55,10 @@ const CheckoutForm = ({ nextStep, backStep }) => {
         {
           type: "card",
           card: elements.getElement(CardElement),
-        }
-      );
+        });
+
+        setLoading(true);
+
       //Utilizo try and catch para gestionar los errores
       if(!error){
         const { id } = paymentMethod;
@@ -66,16 +70,36 @@ const CheckoutForm = ({ nextStep, backStep }) => {
               amount: getBasketTotal(basket) * 100,
             }
           );
-           console.log(data);
-        }
-        catch(error){console.log(error)}
-        
-        //Información que envio al backend
-     
-        //Para ver lo que envio al backend
-       
-      }
+          dispatch({
+            type:actionTypes.SET_PAYMENT_MESSAGE,
+            paymentMessage: data.message
+          });
 
+          dispatch({
+            type: actionTypes.SET_PAYMENT_MESSAGE,
+            paymentMessage: data.message,
+          });
+
+          if (data.message === "Succesful Payment"){
+            //Si la compra es correcta, vacío el carrito
+            dispatch({
+              type:actionTypes.EMPTY_BASKET,
+              basket: [ ],
+            })
+          }
+           
+           //Con esto limpio los datos de la tarjeta una vez utilizada
+           elements.getElement(CardElement).clear();
+           nextStep();
+        }
+        catch(error){
+          console.log(error);
+          nextStep();
+        }
+
+        setLoading(false);
+        
+      }
       //Para ver como guarda los datos el objeto paymentMethod
       console.log(paymentMethod);
     };
@@ -95,12 +119,14 @@ const CheckoutForm = ({ nextStep, backStep }) => {
           Back
         </Button>
         <Button
-          disabled={false}
+          disabled={!stripe}
           type="submit"
           variant="contained"
           color="primary"
         >
-          {accounting.formatMoney(getBasketTotal(basket), "USD $")}
+          { loading ? (<CircularProgress/>)
+          :
+          (accounting.formatMoney(getBasketTotal(basket), "USD $"))}
         </Button>
       </div>
     </form>
