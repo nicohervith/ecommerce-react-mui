@@ -1,6 +1,8 @@
+const colors = require('colors')
 //Back-end
 const express = require("express");
 const Stripe= require("stripe");
+const { mongoose } = require("./database");
 
 //Doy permiso para recuperar los datos en este caso de localhost
 const cors = require("cors")

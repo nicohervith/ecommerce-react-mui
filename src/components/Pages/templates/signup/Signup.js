@@ -115,15 +115,17 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
+          <RouteLink to="/signin" variant="body2">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign Up
+            </Button>
+          </RouteLink>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <RouteLink to="/signin" variant="body2">
