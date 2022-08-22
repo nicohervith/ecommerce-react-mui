@@ -1,7 +1,7 @@
-const colors = require('colors')
 //Back-end
 const express = require("express");
 const Stripe= require("stripe");
+const morgan = require("morgan");
 const { mongoose } = require("./database");
 
 //Doy permiso para recuperar los datos en este caso de localhost
@@ -12,12 +12,17 @@ const stripe = new Stripe(
   "sk_test_51LAIJWIlL7CBuxtZLw6cfpiSgnSFZr6mAcf3enu3d68WecgUflMaJQIC9z0rtNyon4EAFsfhkNtM8EcQS758pg6a00G3apDEpv"
 );
 
+
 //Inicializo express
 const app = express();
+
+//Routes
+app.use("/api/checkout", require("../routes/checkout.routes"));
 
 //middleware
 //Le doy permiso para que el servidor pueda aceptar los datos de origen desde el sitio indicado
 app.use(cors({origin: "https://localhost:3000"}));
+app.use(morgan("dev"));
 app.use(express.json());
 
 app.post("/api/checkout", async(req,res)=>{
