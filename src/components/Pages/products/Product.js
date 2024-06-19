@@ -16,9 +16,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import {actionTypes} from '../../../reducer';
 import {useStateValue} from '../../../StateProvider';
 
-
-
-
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -47,9 +44,7 @@ expandOpen:{
   transform:"rotate(180deg)",
 },
 
-
 }));
-
 
 const useStyles = makeStyles((theme)=>({
   action: {
@@ -77,7 +72,7 @@ export default function Product({product:{id,name,productType,image,price,rating
     setExpanded(!expanded);
   };
 
-  
+
   const addToBasket=()=>{
     dispatch({
       type: actionTypes.ADD_TO_BASKET,

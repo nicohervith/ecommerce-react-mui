@@ -1,8 +1,6 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 
-
-
 const firebaseConfig = firebase.initializeApp({
   apiKey: "AIzaSyD0iPBe-toX9RraUCAcoHBNJM4u8abVdJY",
   authDomain: "ecommerce-first-3eb27.firebaseapp.com",

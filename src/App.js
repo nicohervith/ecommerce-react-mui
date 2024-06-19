@@ -1,32 +1,40 @@
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "./components/Pages/navbar/Navbar";
-import PageRoutes from './components/PageRoutes';
-import {useEffect} from 'react'
-import {auth} from './firebase'
-import {actionTypes} from './reducer';
-import {useStateValue} from './StateProvider';
-
-
+import PageRoutes from "./components/PageRoutes";
+import { useStateValue } from "./StateProvider"; // Asumiendo que aquí tienes tu StateProvider configurado
 
 function App() {
-
   const [{ user }, dispatch] = useStateValue();
+  console.log(user);
+  const location = useLocation();
 
-  useEffect(()=>{
-    auth.onAuthStateChanged((authUser)=>{
-      console.log(authUser);
-      if (authUser){
+  useEffect(() => {
+    const checkLocalStorageUser = () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
         dispatch({
-          type: actionTypes.SET_USER,
-          user: authUser,
+          type: "SET_USER",
+          user: parsedUser,
+        });
+      } else {
+        dispatch({
+          type: "SET_USER",
+          user: null,
         });
       }
-    })
-  },[])
+    };
+
+    checkLocalStorageUser();
+  }, []);
+
   return (
     <div className="App">
-        <Navbar /> 
-        <PageRoutes/>
+      {location.pathname !== "/signin" && location.pathname !== "/signup" && (
+        <Navbar />
+      )}
+      <PageRoutes />
     </div>
   );
 }

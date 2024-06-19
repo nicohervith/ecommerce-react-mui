@@ -1,71 +1,27 @@
-import React, { useContext, useState, useEffect } from "react";
-import { auth } from "../firebase";
-import {
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-const AuthContext = React.createContext();
+import { createContext, useContext, useState } from "react";
 
-export function useAuth() {
+const AuthContext = createContext();
+
+export const useAuth = () => {
   return useContext(AuthContext);
-}
+};
 
-//----------------------------------------
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
-export function AuthProvider({ children }) {
-  //useState used to save the current user
-  const [currentUser, setCurrentUser] = useState();
-  const [loading, setLoading] = useState(true);
-
-  function signup(email, password) {
-    createUserWithEmailAndPassword(auth, email, password);
-  }
-
-  function login(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
-  }
-
-  function logout() {
-    return signOut(auth);
-  }
-
-  function resetPassword(email) {
-    console.log(`Sending reset to ${email}`);
-    return sendPasswordResetEmail(auth, email);
-  }
-
-  function updateEmail(email) {
-    return currentUser.updateEmail(email);
-  }
-
-  function updatePassword(password) {
-    return currentUser.updatePassword(password);
-  }
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
-    });
-    return unsubscribe;
-  }, []);
-
-  //value is using the user throughout the app
-  const value = {
-    currentUser,
-    login,
-    signup,
-    logout,
-    resetPassword,
-    updateEmail,
-    updatePassword,
+  const login = (userData) => {
+    // Aquí puedes realizar cualquier lógica adicional con los datos del usuario
+    setUser(userData);
   };
-  //below this is what renders on the page
+
+  const logout = () => {
+    // Lógica para cerrar sesión, si es necesario
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
     </AuthContext.Provider>
   );
-}
+};
