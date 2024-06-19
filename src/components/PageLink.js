@@ -9,6 +9,8 @@ const PageLink = () => {
         <Link to="/checkout-page"></Link>
         <Link to="/signin"></Link>
         <Link to="/signup"></Link>
+        <Link to="/product-create"></Link>
+        <Link to="/product-list"></Link>
       </ul>
     </nav>
   );

@@ -133,7 +133,7 @@ export default function Navbar() {
                         console.log("Subir artículo");
                       }}
                     >
-                      Subir artículo
+                      <Link to="/product-create">Subir artículo</Link>
                     </MenuItem>
                   )}
                   <MenuItem
