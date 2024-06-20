@@ -3,19 +3,14 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
-  Button,
-  Box,
   Badge,
   Menu,
   MenuItem,
-  MenuList,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, Link as RouteLink, useNavigate } from "react-router-dom";
 import { useStateValue } from "../../../StateProvider";
 import { Person, ShoppingCart } from "@material-ui/icons";
-/* import { MenuIcon } from "@material-ui/icons"; */
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,17 +71,28 @@ export default function Navbar() {
             edge="start"
             color="inherit"
             aria-label="menu"
+            fontSize="large"
             onClick={() => navigate("/")}
           >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Logo_TV_2015.png/50px-Logo_TV_2015.png"
               alt="logo"
-              style={{ width: 30, height: "auto" }}
+              style={{ width: 40, height: "auto" }}
             />
           </IconButton>
 
           <div style={{ flexGrow: 1 }} />
-
+          {/*  {!user ? (
+            <div>
+              <Link to="/signin" style={{ textDecoration: "none" }}>
+                <Button variant="outlined">
+                  <strong> Sign In</strong>
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <div></div>
+          )} */}
           <div>
             <IconButton
               aria-label="show cart items"
@@ -109,6 +115,7 @@ export default function Navbar() {
             >
               <Person fontSize="large" />
             </IconButton>
+
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
@@ -124,10 +131,10 @@ export default function Navbar() {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              {user && (
+              {user ? (
                 <>
                   {user.role.includes("admin") && (
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem onClick={handleMenuClose}>
                       <Link
                         to="/product-create"
                         style={{ textDecoration: "none" }}
@@ -136,17 +143,11 @@ export default function Navbar() {
                       </Link>
                     </MenuItem>
                   )}
-                  <MenuItem
-                    onClick={() => {
-                      /* Acción para perfil */
-                    }}
-                  >
+                  <MenuItem onClick={handleMenuClose}>
                     Perfil
                   </MenuItem>
+                  <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
                 </>
-              )}
-              {user ? (
-                <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
               ) : (
                 <MenuItem onClick={handleSignIn}>Iniciar sesión</MenuItem>
               )}

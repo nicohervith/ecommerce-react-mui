@@ -4,11 +4,14 @@ import Grid from "@material-ui/core/Grid";
 import Product from "./Product";
 import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "../navbar/Navbar";
+import Footer from "../footer/Footer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    width: "90%",
+    margin: "auto",
   },
 }));
 
@@ -50,6 +53,7 @@ const ProductList = () => {
           </Grid>
         </Box>
       </div>
+      <Footer />
     </div>
   );
 };

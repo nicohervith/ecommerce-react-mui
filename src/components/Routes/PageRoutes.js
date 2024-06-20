@@ -1,13 +1,12 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Checkout from "./Chekoutform/Checkout";
-import CheckOutPage from "./Pages/CheckOutPage";
-import PageLink from "./PageLink";
-import SignIn from "./Pages/templates/signin/Signin";
-import SignUp from "./Pages/templates/signup/Signup";
-import ProductCreate from "./Pages/products/create-product/ProductCreate";
-import ProductList from "./Pages/products/ProductList";
-import UpdateProduct from "./Pages/products/update-product/UpdateProduct";
-import { AuthProvider, useAuth } from "../contexts/AuthContext";
+import { Routes, Route } from "react-router-dom";
+import Checkout from "../Chekoutform/Checkout";
+import CheckOutPage from "../Pages/CheckOutPage";
+import SignIn from "../Pages/templates/signin/Signin";
+import SignUp from "../Pages/templates/signup/Signup";
+import ProductCreate from "../Pages/products/create-product/ProductCreate";
+import ProductList from "../Pages/products/ProductList";
+import UpdateProduct from "../Pages/products/update-product/UpdateProduct";
+import { AuthProvider } from "../../contexts/AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 
 const PageRoutes = () => {

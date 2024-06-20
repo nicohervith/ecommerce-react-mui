@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "10px",
     height: "auto",
   },
+  iconContainer: {
+    justifyContent: "space-between",
+  },
 }));
 
 const MySwal = withReactContent(Swal);
@@ -71,8 +74,7 @@ export default function Product({ product }) {
   const classes = useStyles();
   const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
-
-  const [{ basket }, dispatch] = useStateValue();
+  const [{ basket, user }, dispatch] = useStateValue();
   const {
     _id: id,
     name,
@@ -174,27 +176,40 @@ export default function Product({ product }) {
         </Typography>
       </CardContent>
 
-      <CardActions disableSpacing>
-        <IconButton aria-label="Add to Cart" onClick={addToBasket}>
-          <AddShoppingCart fontSize="large" />
-        </IconButton>
-        {Array(rating)
-          .fill()
-          .map((_, i) => (
-            <p>&#11088;</p>
-          ))}
-
-        <IconButton
-          aria-label="Editar producto"
-          component={Link}
-          to={`/editar-producto/${id}`}
+      <CardActions disableSpacing className={classes.iconContainer}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
         >
-          <EditOutlined />
-        </IconButton>
+          <IconButton aria-label="Add to Cart" onClick={addToBasket}>
+            <AddShoppingCart fontSize="large" />
+          </IconButton>
+          {Array(rating)
+            .fill()
+            .map((_, i) => (
+              <p key={i} style={{ fontSize: "20px" }}>
+                &#11088;
+              </p>
+            ))}
+        </div>
+        {user && user.role.includes("admin") && (
+          <>
+            <IconButton
+              aria-label="Editar producto"
+              component={Link}
+              to={`/editar-producto/${id}`}
+            >
+              <EditOutlined />
+            </IconButton>
 
-        <IconButton aria-label="Delete Product" onClick={handleDelete}>
-          <DeleteOutline fontSize="large" />
-        </IconButton>
+            <IconButton aria-label="Delete Product" onClick={handleDelete}>
+              <DeleteOutline fontSize="large" />
+            </IconButton>
+          </>
+        )}
 
         <ExpandMore
           expand={expanded}
