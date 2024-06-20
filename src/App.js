@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Navbar from "./components/Pages/navbar/Navbar";
-import PageRoutes from "./components/PageRoutes";
-import { useStateValue } from "./StateProvider"; // Asumiendo que aquí tienes tu StateProvider configurado
+import React from "react";
+import PageRoutes from "./components/Routes/PageRoutes";
+import { useStateValue } from "./StateProvider";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();

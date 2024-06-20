@@ -4,6 +4,7 @@ import { Grid, Typography } from "@material-ui/core";
 import { useStateValue } from "../../StateProvider";
 import CheckOutCard from "./CheckOutCard";
 import Total from "./Total";
+import Navbar from "./navbar/Navbar";
 //import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,7 @@ const CheckOutPage = () => {
 
   return (
     <div className={classes.root}>
+      <Navbar />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography align="center" gutterBottom variant="h4">
