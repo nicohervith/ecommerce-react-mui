@@ -1,71 +1,82 @@
-import React, { useContext, useState, useEffect } from "react";
-import { auth } from "../firebase";
-import {
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-const AuthContext = React.createContext();
+// AuthContext.js
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { loginRequest, verifyTokenRequest } from "../api/auth";
+import Cookies from "js-cookie";
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+const AuthContext = createContext();
 
-//----------------------------------------
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
 
-export function AuthProvider({ children }) {
-  //useState used to save the current user
-  const [currentUser, setCurrentUser] = useState();
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  function signup(email, password) {
-    createUserWithEmailAndPassword(auth, email, password);
-  }
+  const login = async (credentials) => {
+    try {
+      const res = await loginRequest(credentials);
+      setUser(res.data);
+      setIsAuthenticated(true);
+      Cookies.set("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  function login(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
-  }
-
-  function logout() {
-    return signOut(auth);
-  }
-
-  function resetPassword(email) {
-    console.log(`Sending reset to ${email}`);
-    return sendPasswordResetEmail(auth, email);
-  }
-
-  function updateEmail(email) {
-    return currentUser.updateEmail(email);
-  }
-
-  function updatePassword(password) {
-    return currentUser.updatePassword(password);
-  }
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    Cookies.remove("token");
+    localStorage.removeItem("user");
+  };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
-    });
-    return unsubscribe;
+    const checkLogin = async () => {
+      const token = Cookies.get("token");
+      if (!token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await verifyTokenRequest(token);
+        if (!res.data) {
+          setIsAuthenticated(false);
+          setLoading(false);
+          return;
+        }
+
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+
+    checkLogin();
   }, []);
 
-  //value is using the user throughout the app
-  const value = {
-    currentUser,
-    login,
-    signup,
-    logout,
-    resetPassword,
-    updateEmail,
-    updatePassword,
-  };
-  //below this is what renders on the page
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        isAuthenticated,
+        loading,
+      }}
+    >
+      {children}
     </AuthContext.Provider>
   );
-}
+};

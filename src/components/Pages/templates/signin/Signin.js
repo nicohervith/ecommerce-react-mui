@@ -1,31 +1,26 @@
-import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
+import React, { useState } from "react";
+import { useNavigate, Link as RouteLink } from "react-router-dom";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  CircularProgress,
+  IconButton,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { Link as RouteLink } from "react-router-dom";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Alert from "@material-ui/lab/Alert";
+import { jwtDecode } from "jwt-decode";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { useStateValue } from "../../../../StateProvider";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,76 +40,156 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  loadingContainer: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 export default function SignIn() {
   const classes = useStyles();
+  const [{}, dispatch] = useStateValue();
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:4000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Guardar el token en el localStorage
+        localStorage.setItem("token", data.token);
+
+        // Decodificar el token para obtener la información del usuario
+        const user = jwtDecode(data.token);
+
+        // Actualizar el estado global con la información del usuario
+        dispatch({
+          type: "SET_USER",
+          user: user,
+        });
+
+        setLoading(false);
+        navigate("/");
+      } else {
+        setError(data.message || "Error en usuario o contraseña");
+        setLoading(false);
+      }
+    } catch (error) {
+      setError("Error en la solicitud");
+      setLoading(false);
+    }
+  };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <RouteLink to="/" variant="body2">
+    <div>
+      <div style={{ padding: "10px" }}>
+        <IconButton
+          onClick={() => navigate("/")}
+          style={{ alignSelf: "flex-start" }}
+        >
+          <ArrowBackIcon />
+          <p>Volver</p>
+        </IconButton>
+      </div>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={loading}
             >
               Sign In
             </Button>
-          </RouteLink>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+            <div className={classes.loadingContainer}>
+              {loading && <CircularProgress style={{ marginTop: "20px" }} />}
+              {success && (
+                <Alert severity="success" style={{ marginTop: "20px" }}>
+                  Usuario logueado con éxito! Redirigiendo...
+                </Alert>
+              )}
+              {error && (
+                <Alert severity="error" style={{ marginTop: "20px" }}>
+                  {error}
+                </Alert>
+              )}
+            </div>
+            <Grid container>
+              <Grid item xs>
+                <RouteLink to="/forgot-password" variant="body2">
+                  Forgot password?
+                </RouteLink>
+              </Grid>
+              <Grid item>
+                <RouteLink to="/signup" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </RouteLink>
+              </Grid>
             </Grid>
-            <Grid item>
-              <RouteLink to="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </RouteLink>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+          </form>
+        </div>
+        {/*   <Box mt={8}>
+          <Copyright />
+        </Box> */}
+      </Container>
+    </div>
   );
 }
