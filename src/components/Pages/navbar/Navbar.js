@@ -113,11 +113,11 @@ export default function Navbar() {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "bottom", // Ajusta la posición inicial vertical
+                vertical: "bottom",
                 horizontal: "right",
               }}
               transformOrigin={{
-                vertical: "top", // Ajusta cómo se transforma cuando se abre
+                vertical: "top",
                 horizontal: "right",
               }}
               keepMounted
@@ -127,13 +127,13 @@ export default function Navbar() {
               {user && (
                 <>
                   {user.role.includes("admin") && (
-                    <MenuItem
-                      onClick={() => {
-                        // Acción para subir artículo
-                        console.log("Subir artículo");
-                      }}
-                    >
-                      <Link to="/product-create">Subir artículo</Link>
+                    <MenuItem onClick={() => {}}>
+                      <Link
+                        to="/product-create"
+                        style={{ textDecoration: "none" }}
+                      >
+                        Subir artículo
+                      </Link>
                     </MenuItem>
                   )}
                   <MenuItem

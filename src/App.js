@@ -7,33 +7,9 @@ import { useStateValue } from "./StateProvider"; // Asumiendo que aquí tienes t
 function App() {
   const [{ user }, dispatch] = useStateValue();
   console.log(user);
-  const location = useLocation();
-
-  useEffect(() => {
-    const checkLocalStorageUser = () => {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        dispatch({
-          type: "SET_USER",
-          user: parsedUser,
-        });
-      } else {
-        dispatch({
-          type: "SET_USER",
-          user: null,
-        });
-      }
-    };
-
-    checkLocalStorageUser();
-  }, []);
 
   return (
     <div className="App">
-      {location.pathname !== "/signin" && location.pathname !== "/signup" && (
-        <Navbar />
-      )}
       <PageRoutes />
     </div>
   );

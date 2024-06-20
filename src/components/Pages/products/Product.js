@@ -91,7 +91,6 @@ export default function Product({ product }) {
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
-          console.log("data", data);
         } else {
           console.error("Error al obtener productos:", response.status);
         }

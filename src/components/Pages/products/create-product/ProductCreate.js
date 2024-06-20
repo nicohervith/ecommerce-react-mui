@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { TextField, Button } from "@material-ui/core";
+import Navbar from "../../navbar/Navbar";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -30,6 +31,7 @@ const MySwal = withReactContent(Swal);
 const ProductCreate = () => {
   const classes = useStyles();
   const [{ user }] = useStateValue();
+  console.log(user);
 
   const [formData, setFormData] = useState({
     image: "",
@@ -99,81 +101,84 @@ const ProductCreate = () => {
   };
 
   return (
-    <Card style={{ boxShadow: "none !important" }} elevation={0}>
-      <CardContent>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <TextField
-            className={classes.input}
-            type="text"
-            name="image"
-            label="URL de la imagen"
-            variant="outlined"
-            value={formData.image}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            className={classes.input}
-            type="text"
-            name="name"
-            label="Nombre del producto"
-            variant="outlined"
-            value={formData.name}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            className={classes.input}
-            type="text"
-            name="productType"
-            label="Tipo de producto"
-            variant="outlined"
-            value={formData.productType}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            className={classes.input}
-            name="description"
-            label="Descripción del producto"
-            variant="outlined"
-            value={formData.description}
-            onChange={handleChange}
-            multiline
-            rows={4}
-            fullWidth
-          />
-          <TextField
-            className={classes.input}
-            type="text"
-            name="price"
-            label="Precio"
-            variant="outlined"
-            value={formData.price}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            className={classes.input}
-            type="text"
-            name="tags"
-            label="Etiquetas (separadas por comas)"
-            variant="outlined"
-            value={formData.tags}
-            onChange={handleChange}
-            fullWidth
-          />
-          <Button
-            className={classes.button}
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Crear Producto
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+    <div>
+      <Navbar />
+      <Card style={{ boxShadow: "none !important" }} elevation={0}>
+        <CardContent>
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <TextField
+              className={classes.input}
+              type="text"
+              name="image"
+              label="URL de la imagen"
+              variant="outlined"
+              value={formData.image}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              className={classes.input}
+              type="text"
+              name="name"
+              label="Nombre del producto"
+              variant="outlined"
+              value={formData.name}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              className={classes.input}
+              type="text"
+              name="productType"
+              label="Tipo de producto"
+              variant="outlined"
+              value={formData.productType}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              className={classes.input}
+              name="description"
+              label="Descripción del producto"
+              variant="outlined"
+              value={formData.description}
+              onChange={handleChange}
+              multiline
+              rows={4}
+              fullWidth
+            />
+            <TextField
+              className={classes.input}
+              type="text"
+              name="price"
+              label="Precio"
+              variant="outlined"
+              value={formData.price}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              className={classes.input}
+              type="text"
+              name="tags"
+              label="Etiquetas (separadas por comas)"
+              variant="outlined"
+              value={formData.tags}
+              onChange={handleChange}
+              fullWidth
+            />
+            <Button
+              className={classes.button}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Crear Producto
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

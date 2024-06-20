@@ -1,19 +1,17 @@
+// ProtectedRoute.js
 import React from "react";
-import { Route, Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { Navigate, Outlet } from "react-router-dom";
+import { useStateValue } from "../StateProvider";
 
-const ProtectedRoute = ({ element: Element, adminOnly, ...rest }) => {
-  const { isLoggedIn, isAdmin } = useAuth();
+const ProtectedRoute = () => {
+  const [{ isAuthenticated, user }] = useStateValue();
 
-  if (!isLoggedIn) {
-    return <Navigate to="/signin" />;
+  console.log("ProtectedRoute - user:", user);
+  if (!isAuthenticated || !user || !user.role.includes("admin")) {
+    return <Navigate to="/signin" replace />;
   }
 
-  if (adminOnly && !isAdmin) {
-    return <Navigate to="/" />;
-  }
-
-  return <Route {...rest} element={<Element />} />;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

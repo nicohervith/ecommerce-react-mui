@@ -3,6 +3,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Product from "./Product";
 import { makeStyles } from "@material-ui/core/styles";
+import Navbar from "../navbar/Navbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,16 +36,20 @@ const ProductList = () => {
   }, []);
 
   return (
-    <div className={classes.root}>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
-          {products.map((product) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-              <Product product={product} />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+    <div>
+      <Navbar />
+
+      <div className={classes.root}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            {products.map((product) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+                <Product product={product} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </div>
     </div>
   );
 };
