@@ -1,27 +1,28 @@
-import { createContext, useContext, useState } from "react";
+// AuthContext.js
+
+import React, { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const login = (userData) => {
-    // Aquí puedes realizar cualquier lógica adicional con los datos del usuario
-    setUser(userData);
+  const login = () => {
+    setIsLoggedIn(true);
+    setIsAdmin(true);
   };
 
   const logout = () => {
-    // Lógica para cerrar sesión, si es necesario
-    setUser(null);
+    setIsLoggedIn(false);
+    setIsAdmin(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, isAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

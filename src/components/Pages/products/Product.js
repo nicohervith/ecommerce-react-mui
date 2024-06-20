@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import React, { useState, useEffect } from "react";
 import { styled } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -9,15 +11,16 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import accounting from "accounting";
-import { AddShoppingCart, Edit, EditOutlined } from "@material-ui/icons";
-import { grey } from "@material-ui/core/colors";
+import {
+  AddShoppingCart,
+  DeleteOutline,
+  EditOutlined,
+} from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import CardMedia from "@material-ui/core/CardMedia";
 import { actionTypes } from "../../../reducer";
 import { useStateValue } from "../../../StateProvider";
-import ProductList from "./ProductList";
-import UpdateProduct from "./update-product/UpdateProduct";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -62,15 +65,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Product({
-  product: { id, name, productType, image, price, rating, description },
-}) {
-  const classes = useStyles();
+const MySwal = withReactContent(Swal);
 
+export default function Product({ product }) {
+  const classes = useStyles();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
 
   const [{ basket }, dispatch] = useStateValue();
-
+  const {
+    _id: id,
+    name,
+    productType,
+    image,
+    price,
+    rating,
+    description,
+  } = product;
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -111,6 +122,37 @@ export default function Product({
     });
   };
 
+  const handleDelete = async () => {
+    try {
+      const result = await MySwal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción es irreversible.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      });
+
+      if (result.isConfirmed) {
+        const response = await fetch(
+          `http://localhost:4000/api/products/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        if (response.ok) {
+          navigate("/");
+        } else {
+          console.error("Error al eliminar el producto:", response.status);
+        }
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
+
   return (
     <Card sx={{ maxWidth: 345, height: "100%" }}>
       <CardHeader
@@ -145,11 +187,16 @@ export default function Product({
 
         <IconButton
           aria-label="Editar producto"
-          component={Link} // Usa Link si estás usando react-router-dom para navegar
-          to={`/editar-producto/${id}`} // Define la ruta de edición adecuada
+          component={Link}
+          to={`/editar-producto/${id}`}
         >
           <EditOutlined />
         </IconButton>
+
+        <IconButton aria-label="Delete Product" onClick={handleDelete}>
+          <DeleteOutline fontSize="large" />
+        </IconButton>
+
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

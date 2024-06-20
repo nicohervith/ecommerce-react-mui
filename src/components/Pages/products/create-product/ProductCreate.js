@@ -1,11 +1,10 @@
 import React, { useState } from "react";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { useStateValue } from "../../../../StateProvider";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-
 import { TextField, Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: "flex-end",
   },
 }));
-
+const MySwal = withReactContent(Swal);
 const ProductCreate = () => {
   const classes = useStyles();
   const [{ user }] = useStateValue();
-  console.log(" create product", user);
+
   const [formData, setFormData] = useState({
     image: "",
     name: "",
@@ -67,12 +66,35 @@ const ProductCreate = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Producto creado:", data);
+        MySwal.fire({
+          icon: "success",
+          title: "¡Producto creado!",
+          text: "El producto se ha creado correctamente.",
+        });
+
+        setFormData({
+          image: "",
+          name: "",
+          productType: "",
+          description: "",
+          price: "",
+          tags: "",
+        });
       } else {
         console.error("Error al crear el producto");
+        MySwal.fire({
+          icon: "error",
+          title: "¡Error!",
+          text: "Hubo un problema al crear el producto.",
+        });
       }
     } catch (error) {
       console.error("Error al enviar la solicitud:", error);
+      MySwal.fire({
+        icon: "error",
+        title: "¡Error!",
+        text: "Hubo un problema al crear el producto.",
+      });
     }
   };
 
@@ -83,7 +105,7 @@ const ProductCreate = () => {
           <TextField
             className={classes.input}
             type="text"
-            name="imgUrl"
+            name="image"
             label="URL de la imagen"
             variant="outlined"
             value={formData.image}
