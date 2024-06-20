@@ -9,13 +9,15 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import accounting from "accounting";
-import { AddShoppingCart } from "@material-ui/icons";
+import { AddShoppingCart, Edit, EditOutlined } from "@material-ui/icons";
 import { grey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import CardMedia from "@material-ui/core/CardMedia";
 import { actionTypes } from "../../../reducer";
 import { useStateValue } from "../../../StateProvider";
 import ProductList from "./ProductList";
+import UpdateProduct from "./update-product/UpdateProduct";
+import { Link } from "react-router-dom";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -141,6 +143,13 @@ export default function Product({
             <p>&#11088;</p>
           ))}
 
+        <IconButton
+          aria-label="Editar producto"
+          component={Link} // Usa Link si estás usando react-router-dom para navegar
+          to={`/editar-producto/${id}`} // Define la ruta de edición adecuada
+        >
+          <EditOutlined />
+        </IconButton>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

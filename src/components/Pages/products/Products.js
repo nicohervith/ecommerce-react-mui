@@ -1,8 +1,6 @@
 import * as React from "react";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-
-import { grey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import Product from "./Product";
 import products from "../../../product-data";

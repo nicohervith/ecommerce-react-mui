@@ -7,6 +7,7 @@ import SignIn from "./Pages/templates/signin/Signin";
 import SignUp from "./Pages/templates/signup/Signup";
 import ProductCreate from "./Pages/products/create-product/ProductCreate";
 import ProductList from "./Pages/products/ProductList";
+import UpdateProduct from "./Pages/products/update-product/UpdateProduct";
 
 const PageRoutes = () => {
   return (
@@ -20,6 +21,7 @@ const PageRoutes = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/product-create" element={<ProductCreate />} />
         <Route path="/product-list" element={<ProductList />} />
+        <Route path="/editar-producto/:id" element={<UpdateProduct />} />
       </Routes>
     </div>
   );
