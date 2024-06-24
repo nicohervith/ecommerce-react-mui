@@ -53,6 +53,8 @@ const CheckoutForm = ({ nextStep, backStep }) => {
   const stripe = useStripe();
   const elements = useElements();
 
+  const apiUrl = <process class="env REACT_APP_API_URL"></process>;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -65,17 +67,14 @@ const CheckoutForm = ({ nextStep, backStep }) => {
 
       if (!error) {
         const { id } = paymentMethod;
-        const response = await axios.post(
-          "http://localhost:4000/api/checkout",
-          {
-            id,
-            amount: getBasketTotal(basket) * 100,
-            products: basket.map((product) => ({
-              name: product.name,
-              price: product.price,
-            })),
-          }
-        );
+        const response = await axios.post(`${apiUrl}/checkout`, {
+          id,
+          amount: getBasketTotal(basket) * 100,
+          products: basket.map((product) => ({
+            name: product.name,
+            price: product.price,
+          })),
+        });
 
         const { data } = response;
 

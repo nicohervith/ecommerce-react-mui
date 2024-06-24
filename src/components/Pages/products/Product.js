@@ -86,11 +86,12 @@ export default function Product({ product }) {
     inStock,
   } = product;
   const [products, setProducts] = useState([]);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/products");
+        const response = await fetch(`${apiUrl}/products`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
@@ -125,48 +126,6 @@ export default function Product({ product }) {
     });
   };
 
-  /*   const handleDelete = async (id) => {
-    try {
-      const result = await MySwal.fire({
-        title: "¿Estás seguro?",
-        text: "Esta acción es irreversible.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar",
-      });
-
-      if (result.isConfirmed) {
-        const response = await fetch(
-          `http://localhost:4000/api/products/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
-        if (response.status === 200) {
-          MySwal.fire({
-            icon: "success",
-            title: "Producto eliminado",
-            text: "El producto se ha eliminado correctamente.",
-          });
-          // Actualizar el estado de productos
-          setProducts(products.filter((product) => product.id !== id));
-        } else {
-          console.error("Error al eliminar el producto:", response.status);
-          MySwal.fire({
-            icon: "error",
-            title: "¡Error!",
-            text: "Hubo un problema al eliminar el producto.",
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Error en la solicitud:", error);
-    }
-  }; */
-
   const handleDelete = async () => {
     try {
       const result = await MySwal.fire({
@@ -181,12 +140,9 @@ export default function Product({ product }) {
       });
 
       if (result.isConfirmed) {
-        const response = await fetch(
-          `http://localhost:4000/api/products/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`${apiUrl}/products/${id}`, {
+          method: "DELETE",
+        });
         setProducts(products.filter((product) => product.id !== id));
         if (response.status === 200) {
           MySwal.fire({

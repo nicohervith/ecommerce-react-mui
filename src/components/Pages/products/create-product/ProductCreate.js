@@ -44,6 +44,7 @@ const ProductCreate = () => {
     price: "",
     tags: "",
   });
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleChange = (e) => {
     setFormData({
@@ -57,17 +58,14 @@ const ProductCreate = () => {
     const token = localStorage.getItem("token");
     console.log("token", token);
     try {
-      const response = await fetch(
-        "http://localhost:4000/api/products/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${apiUrl}/products/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.ok) {
         const data = await response.json();
