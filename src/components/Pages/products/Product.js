@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "10px",
     height: "auto",
   },
+  iconContainer: {
+    justifyContent: "space-between",
+  },
 }));
 
 const MySwal = withReactContent(Swal);
@@ -71,16 +74,16 @@ export default function Product({ product }) {
   const classes = useStyles();
   const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
-
-  const [{ basket }, dispatch] = useStateValue();
+  const [{ basket, user }, dispatch] = useStateValue();
   const {
     _id: id,
     name,
     productType,
+    rating,
     image,
     price,
-    rating,
     description,
+    inStock,
   } = product;
   const [products, setProducts] = useState([]);
 
@@ -113,13 +116,56 @@ export default function Product({ product }) {
         id,
         name,
         productType,
+        rating,
         image,
         price,
-        rating,
         description,
+        inStock,
       },
     });
   };
+
+  /*   const handleDelete = async (id) => {
+    try {
+      const result = await MySwal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción es irreversible.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      });
+
+      if (result.isConfirmed) {
+        const response = await fetch(
+          `http://localhost:4000/api/products/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        if (response.status === 200) {
+          MySwal.fire({
+            icon: "success",
+            title: "Producto eliminado",
+            text: "El producto se ha eliminado correctamente.",
+          });
+          // Actualizar el estado de productos
+          setProducts(products.filter((product) => product.id !== id));
+        } else {
+          console.error("Error al eliminar el producto:", response.status);
+          MySwal.fire({
+            icon: "error",
+            title: "¡Error!",
+            text: "Hubo un problema al eliminar el producto.",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  }; */
 
   const handleDelete = async () => {
     try {
@@ -141,10 +187,21 @@ export default function Product({ product }) {
             method: "DELETE",
           }
         );
-        if (response.ok) {
+        setProducts(products.filter((product) => product.id !== id));
+        if (response.status === 200) {
+          MySwal.fire({
+            icon: "success",
+            title: "Producto eliminado",
+            text: "El producto se ha eliminado correctamente.",
+          });
           navigate("/");
         } else {
-          console.error("Error al eliminar el producto:", response.status);
+          console.error("Error al actualizar el producto:", response.status);
+          MySwal.fire({
+            icon: "error",
+            title: "¡Error!",
+            text: "Hubo un problema al eliminar el producto.",
+          });
         }
       }
     } catch (error) {
@@ -165,7 +222,7 @@ export default function Product({ product }) {
           </Typography>
         }
         title={name}
-        subheader="in stock"
+        subheader={inStock ? "In stock" : "Out of stock"}
       />
       <CardMedia className={classes.media} image={image} title={name} />
       <CardContent>
@@ -174,28 +231,43 @@ export default function Product({ product }) {
         </Typography>
       </CardContent>
 
-      <CardActions disableSpacing>
-        <IconButton aria-label="Add to Cart" onClick={addToBasket}>
-          <AddShoppingCart fontSize="large" />
-        </IconButton>
-        {Array(rating)
-          .fill()
-          .map((_, i) => (
-            <p>&#11088;</p>
-          ))}
-
-        <IconButton
-          aria-label="Editar producto"
-          component={Link}
-          to={`/editar-producto/${id}`}
+      <CardActions disableSpacing className={classes.iconContainer}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
         >
-          <EditOutlined />
-        </IconButton>
-
-        <IconButton aria-label="Delete Product" onClick={handleDelete}>
-          <DeleteOutline fontSize="large" />
-        </IconButton>
-
+          <IconButton
+            aria-label="Add to Cart"
+            onClick={addToBasket}
+            disabled={!inStock}
+          >
+            <AddShoppingCart fontSize="large" />
+          </IconButton>
+          {Array(rating)
+            .fill()
+            .map((_, i) => (
+              <p key={i} style={{ fontSize: "20px" }}>
+                &#11088;
+              </p>
+            ))}
+        </div>
+        {user && user.role.includes("admin") && (
+          <>
+            <IconButton
+              aria-label="Editar producto"
+              component={Link}
+              to={`/editar-producto/${id}`}
+            >
+              <EditOutlined />
+            </IconButton>
+            <IconButton aria-label="Delete Product" onClick={handleDelete}>
+              <DeleteOutline fontSize="large" />
+            </IconButton>
+          </>
+        )}
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

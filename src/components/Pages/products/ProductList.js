@@ -4,11 +4,15 @@ import Grid from "@material-ui/core/Grid";
 import Product from "./Product";
 import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "../navbar/Navbar";
+import Footer from "../footer/Footer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    width: "90%",
+    margin: "auto",
+    paddingTop: "90px",
   },
 }));
 
@@ -39,6 +43,32 @@ const ProductList = () => {
     <div>
       <Navbar />
 
+     {/*  <div className={classes.carouselContainer}>
+        <Slider {...settings}>
+          <div>
+            <img
+              src="https://via.placeholder.com/1200x400?text=Oferta+1"
+              alt="Oferta 1"
+              className={classes.carouselImage}
+            />
+          </div>
+          <div>
+            <img
+              src="https://via.placeholder.com/1200x400?text=Oferta+2"
+              alt="Oferta 2"
+              className={classes.carouselImage}
+            />
+          </div>
+          <div>
+            <img
+              src="https://via.placeholder.com/1200x400?text=Oferta+3"
+              alt="Oferta 3"
+              className={classes.carouselImage}
+            />
+          </div>
+        </Slider>
+      </div> */}
+
       <div className={classes.root}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
@@ -50,6 +80,7 @@ const ProductList = () => {
           </Grid>
         </Box>
       </div>
+      <Footer />
     </div>
   );
 };

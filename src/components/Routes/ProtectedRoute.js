@@ -1,7 +1,7 @@
 // ProtectedRoute.js
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useStateValue } from "../StateProvider";
+import { useStateValue } from "../../StateProvider";
 
 const ProtectedRoute = () => {
   const [{ isAuthenticated, user }] = useStateValue();

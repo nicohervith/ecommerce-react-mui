@@ -33,7 +33,6 @@ const reducer = (state, action) => {
       let newBasket = [...state.basket];
       if (index >= 0) {
         newBasket.splice(index, 1);
-        //Esto me permite eliminar solo un objeto de ese mismo indice, para evitar eliminar todos los elementos del mismo id
       } else {
         console.log("Cant remove product ");
       }
