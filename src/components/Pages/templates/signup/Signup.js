@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -85,7 +85,7 @@ export default function SignUp() {
     setLoading(true); // Iniciar el loader
 
     try {
-      const response = await fetch("http://localhost:4000/api/auth/register", {
+      const response = await fetch(`${apiUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

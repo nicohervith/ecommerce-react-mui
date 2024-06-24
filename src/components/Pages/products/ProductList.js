@@ -19,11 +19,12 @@ const useStyles = makeStyles((theme) => ({
 const ProductList = () => {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/products");
+        const response = await fetch(`${apiUrl}/products`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
@@ -43,7 +44,7 @@ const ProductList = () => {
     <div>
       <Navbar />
 
-     {/*  <div className={classes.carouselContainer}>
+      {/*  <div className={classes.carouselContainer}>
         <Slider {...settings}>
           <div>
             <img
