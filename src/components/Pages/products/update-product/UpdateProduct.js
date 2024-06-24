@@ -56,7 +56,8 @@ const UpdateProduct = () => {
 
   const navigate = useNavigate();
   const classes = useStyles();
-
+  
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [expanded, setExpanded] = useState(false);
   const [formData, setFormData] = useState({
     image: "",
@@ -68,13 +69,10 @@ const UpdateProduct = () => {
     tags: "",
     inStock: true,
   });
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:4000/api/products/${productId}`
-        );
+        const response = await axios.get(`${apiUrl}/products/${productId}`);
         if (response.status === 200) {
           const {
             image,
@@ -150,7 +148,7 @@ const UpdateProduct = () => {
           tags: formData.tags.split(",").map((tag) => tag.trim()),
         };
         const response = await axios.put(
-          `http://localhost:4000/api/products/${productId}`,
+          `${apiUrl}/products/${productId}`,
           updatedProduct
         );
         if (response.status === 200) {
