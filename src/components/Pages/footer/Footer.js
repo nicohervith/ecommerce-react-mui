@@ -1,16 +1,12 @@
 // Footer.js
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Toolbar,
-  Typography,
-  IconButton,
-} from "@material-ui/core";
+import { Toolbar, Typography, IconButton } from "@material-ui/core";
 import { Facebook, Twitter, Instagram, LinkedIn } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   footer: {
-    backgroundColor: "#dddddd",
+    backgroundColor: "#567a51",
     padding: theme.spacing(1, 0),
     marginTop: theme.spacing(8),
   },
@@ -19,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
   socialIcons: {
     marginRight: theme.spacing(1),
+    color: "#f9f9f9",
   },
 }));
 
@@ -28,7 +25,7 @@ const Footer = () => {
   return (
     <footer className={classes.footer}>
       <Toolbar>
-        <Typography variant="body1" color="textSecondary">
+        <Typography variant="body1" style={{ color: "#f9f9f9" }}>
           &copy; 2024 Tu Empresa. Todos los derechos reservados.
         </Typography>
         <div className={classes.grow} />

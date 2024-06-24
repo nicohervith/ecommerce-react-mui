@@ -79,10 +79,11 @@ export default function Product({ product }) {
     _id: id,
     name,
     productType,
+    rating,
     image,
     price,
-    rating,
     description,
+    inStock,
   } = product;
   const [products, setProducts] = useState([]);
 
@@ -115,13 +116,56 @@ export default function Product({ product }) {
         id,
         name,
         productType,
+        rating,
         image,
         price,
-        rating,
         description,
+        inStock,
       },
     });
   };
+
+  /*   const handleDelete = async (id) => {
+    try {
+      const result = await MySwal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción es irreversible.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      });
+
+      if (result.isConfirmed) {
+        const response = await fetch(
+          `http://localhost:4000/api/products/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        if (response.status === 200) {
+          MySwal.fire({
+            icon: "success",
+            title: "Producto eliminado",
+            text: "El producto se ha eliminado correctamente.",
+          });
+          // Actualizar el estado de productos
+          setProducts(products.filter((product) => product.id !== id));
+        } else {
+          console.error("Error al eliminar el producto:", response.status);
+          MySwal.fire({
+            icon: "error",
+            title: "¡Error!",
+            text: "Hubo un problema al eliminar el producto.",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  }; */
 
   const handleDelete = async () => {
     try {
@@ -143,10 +187,21 @@ export default function Product({ product }) {
             method: "DELETE",
           }
         );
-        if (response.ok) {
+        setProducts(products.filter((product) => product.id !== id));
+        if (response.status === 200) {
+          MySwal.fire({
+            icon: "success",
+            title: "Producto eliminado",
+            text: "El producto se ha eliminado correctamente.",
+          });
           navigate("/");
         } else {
-          console.error("Error al eliminar el producto:", response.status);
+          console.error("Error al actualizar el producto:", response.status);
+          MySwal.fire({
+            icon: "error",
+            title: "¡Error!",
+            text: "Hubo un problema al eliminar el producto.",
+          });
         }
       }
     } catch (error) {
@@ -167,7 +222,7 @@ export default function Product({ product }) {
           </Typography>
         }
         title={name}
-        subheader="in stock"
+        subheader={inStock ? "In stock" : "Out of stock"}
       />
       <CardMedia className={classes.media} image={image} title={name} />
       <CardContent>
@@ -184,7 +239,11 @@ export default function Product({ product }) {
             alignItems: "center",
           }}
         >
-          <IconButton aria-label="Add to Cart" onClick={addToBasket}>
+          <IconButton
+            aria-label="Add to Cart"
+            onClick={addToBasket}
+            disabled={!inStock}
+          >
             <AddShoppingCart fontSize="large" />
           </IconButton>
           {Array(rating)
@@ -204,13 +263,11 @@ export default function Product({ product }) {
             >
               <EditOutlined />
             </IconButton>
-
             <IconButton aria-label="Delete Product" onClick={handleDelete}>
               <DeleteOutline fontSize="large" />
             </IconButton>
           </>
         )}
-
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

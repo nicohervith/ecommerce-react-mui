@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[3],
   },
+  mainCard: {
+    paddingTop: "70px",
+  },
   input: {
     marginBottom: theme.spacing(1),
   },
@@ -103,7 +106,11 @@ const ProductCreate = () => {
   return (
     <div>
       <Navbar />
-      <Card style={{ boxShadow: "none !important" }} elevation={0}>
+      <Card
+        style={{ boxShadow: "none !important" }}
+        elevation={0}
+        className={classes.mainCard}
+      >
         <CardContent>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField

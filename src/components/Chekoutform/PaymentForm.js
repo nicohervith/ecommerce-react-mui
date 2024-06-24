@@ -1,14 +1,25 @@
-import { Button, CircularProgress, Divider, Typography } from '@material-ui/core'
-import React from 'react'
-import Review from './Review'
-import {Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js';
-import {accounting} from 'accounting';
-import { actionTypes, getBasketTotal } from '../../reducer';
-import { useStateValue } from '../../StateProvider';
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  Typography,
+} from "@material-ui/core";
+import React from "react";
+import Review from "./Review";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { accounting } from "accounting";
+import { actionTypes, getBasketTotal } from "../../reducer";
+import { useStateValue } from "../../StateProvider";
 import { Link } from "react-router-dom";
-import axios from "axios"
-import { useState } from 'react';
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useState } from "react";
 
 const stripePromise = loadStripe(
   "pk_test_51LAIJWIlL7CBuxtZcmAPD1sA5suFZEldPhSnwUIeq7COSXRCTuz4V19Yhp1Ziqy202co2iWzqg3jnft25AzK23dV00IAPmkVVO"
@@ -22,88 +33,96 @@ const CARD_ELEMENT_OPTIONS = {
       iconColor: "rgb(240, 57, 122)",
       color: "#333",
       fontSize: "18px",
-      "::placeholder":{
+      "::placeholder": {
         color: "#ccc",
       },
     },
-    invalid:{
+    invalid: {
       color: "#e5424d",
-      ":focus":{
+      ":focus": {
         color: "#303238",
-      }
-    }
-  }
-
+      },
+    },
+  },
 };
 
-// "Test card number" de stripe para validar los form
-
 const CheckoutForm = ({ nextStep, backStep }) => {
-
-  const [{ basket , paymentMessage }, dispatch] = useStateValue();
+  const [{ basket }, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
-  
+  const [paymentMessage, setPaymentMessage] = useState("");
   const stripe = useStripe();
   const elements = useElements();
 
-    const handleSubmit = async(e) => {
-      //Para que el formulario no se refresque
-      e.preventDefault();
-      //El hook de stripe me permite acceder al createPaymentMethod
-      const { error, paymentMethod } = await stripe.createPaymentMethod(
-        //Creo un metodo de pago e indico que el pago va a ser por tarjeta
-        {
-          type: "card",
-          card: elements.getElement(CardElement),
-        });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-        setLoading(true);
+    try {
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: "card",
+        card: elements.getElement(CardElement),
+      });
 
-      //Utilizo try and catch para gestionar los errores
-      if(!error){
+      if (!error) {
         const { id } = paymentMethod;
-        try{
-          const { data } = await axios.post(
-            "https://localhost:3001/api/checkout",
-            {
-              id,
-              amount: getBasketTotal(basket) * 100,
-            }
-          );
-          dispatch({
-            type:actionTypes.SET_PAYMENT_MESSAGE,
-            paymentMessage: data.message
-          });
-
-          dispatch({
-            type: actionTypes.SET_PAYMENT_MESSAGE,
-            paymentMessage: data.message,
-          });
-
-          if (data.message === "Succesful Payment"){
-            //Si la compra es correcta, vacío el carrito
-            dispatch({
-              type:actionTypes.EMPTY_BASKET,
-              basket: [ ],
-            })
+        const response = await axios.post(
+          "http://localhost:4000/api/checkout",
+          {
+            id,
+            amount: getBasketTotal(basket) * 100,
+            products: basket.map((product) => ({
+              name: product.name,
+              price: product.price,
+            })),
           }
-           
-           //Con esto limpio los datos de la tarjeta una vez utilizada
-           elements.getElement(CardElement).clear();
-           nextStep();
-        }
-        catch(error){
-          console.log(error);
+        );
+
+        const { data } = response;
+
+        if (data.status === "Successful payment") {
+          setPaymentMessage(data.message);
+          dispatch({
+            type: actionTypes.EMPTY_BASKET,
+            basket: [],
+          });
+
+          Swal.fire({
+            title: "Payment Successful",
+            text: "Your payment was processed successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+
+          // Avanza al siguiente paso
+          nextStep();
+        } else {
+          // Maneja otros mensajes de respuesta, si es necesario
+          setPaymentMessage(data.message || "Payment failed");
           nextStep();
         }
-
-        setLoading(false);
-        
+      } else {
+        console.log(error);
+        Swal.fire({
+          title: "Payment Error",
+          text: "There was an error processing your payment. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        nextStep();
       }
-      //Para ver como guarda los datos el objeto paymentMethod
-      console.log(paymentMethod);
-    };
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        title: "Payment Error",
+        text: "There was an error processing your payment. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      nextStep();
+    }
 
+    setLoading(false);
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -124,35 +143,32 @@ const CheckoutForm = ({ nextStep, backStep }) => {
           variant="contained"
           color="primary"
         >
-          { loading ? (<CircularProgress/>)
-          :
-          (accounting.formatMoney(getBasketTotal(basket), "USD $"))}
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            accounting.formatMoney(getBasketTotal(basket), "USD $")
+          )}
         </Button>
       </div>
     </form>
   );
-  
 };
 
-const PaymentForm = ({nextStep,backStep}) => {
-  
+const PaymentForm = ({ nextStep, backStep }) => {
   return (
     <>
-
-      <Review/>
-      <Divider/>
-      <Typography variant="h6" gutterBottom style={{margin:"20px 0"}}>
-            Payment method
+      <Review />
+      <Divider />
+      <Typography variant="h6" gutterBottom style={{ margin: "20px 0" }}>
+        Payment method
       </Typography>
 
-
-        {/*Elementos de stripe*/ }
+      {/*Elementos de stripe*/}
       <Elements stripe={stripePromise}>
-          <CheckoutForm backStep={backStep} nextStep={nextStep}/>
+        <CheckoutForm backStep={backStep} nextStep={nextStep} />
       </Elements>
+    </>
+  );
+};
 
-      </>
-  )
-}
-
-export default PaymentForm
+export default PaymentForm;

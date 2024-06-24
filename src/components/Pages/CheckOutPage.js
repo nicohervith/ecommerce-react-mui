@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: "2rem",
   },
+  mainCart: {
+    paddingTop: "60px",
+  },
 }));
 
 const CheckOutPage = () => {
@@ -33,7 +36,7 @@ const CheckOutPage = () => {
   return (
     <div className={classes.root}>
       <Navbar />
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className={classes.mainCart}>
         <Grid item xs={12}>
           <Typography align="center" gutterBottom variant="h4">
             Carrito
