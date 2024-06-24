@@ -6,23 +6,20 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardActions,
   CardMedia,
-  IconButton,
   Typography,
-  Collapse,
   TextField,
   Button,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import axios from "axios";
 import accounting from "accounting";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 505,
+    maxWidth: 705,
     height: "100%",
     margin: "auto",
   },
@@ -30,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing(2),
-    maxWidth: 400,
+    maxWidth: 500,
     margin: "auto",
     padding: theme.spacing(2),
     backgroundColor: theme.palette.background.paper,
@@ -39,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 0,
-    paddingTop: "56.25%", // 16:9
+    paddingTop: "56.25%",
   },
   expand: {
     transform: "rotate(0deg)",
@@ -53,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const MySwal = withReactContent(Swal);
+
 const UpdateProduct = () => {
   const { productId } = useParams();
 
@@ -64,9 +62,11 @@ const UpdateProduct = () => {
     image: "",
     name: "",
     productType: "",
+    rating: "",
     description: "",
     price: "",
     tags: "",
+    inStock: true,
   });
 
   useEffect(() => {
@@ -76,15 +76,25 @@ const UpdateProduct = () => {
           `http://localhost:4000/api/products/${productId}`
         );
         if (response.status === 200) {
-          const { image, name, productType, description, price, tags } =
-            response.data;
+          const {
+            image,
+            name,
+            productType,
+            rating,
+            description,
+            price,
+            tags,
+            inStock,
+          } = response.data;
           setFormData({
             image,
             name,
             productType,
+            rating,
             description,
             price,
             tags: tags.join(", "),
+            inStock,
           });
         } else {
           console.error("Error al obtener el producto:", response.status);
@@ -98,10 +108,25 @@ const UpdateProduct = () => {
   }, [productId]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") {
+      setFormData({
+        ...formData,
+        [name]: checked,
+      });
+    } else if (name === "rating") {
+      const rating = Math.max(0, Math.min(5, Number(value)));
+      setFormData({
+        ...formData,
+        [name]: rating,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -180,30 +205,6 @@ const UpdateProduct = () => {
             title={formData.name}
           />
           <CardContent>
-            <Typography variant="body2" color="textSecondary">
-              {formData.productType}
-            </Typography>
-          </CardContent>
-
-          <CardActions disableSpacing>
-            <IconButton
-              className={clsx(classes.expand, {
-                [classes.expandOpen]: expanded,
-              })}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <CardContent>
-              <Typography paragraph>{formData.description}</Typography>
-            </CardContent>
-          </Collapse>
-
-          <CardContent>
             <TextField
               type="text"
               name="image"
@@ -223,6 +224,15 @@ const UpdateProduct = () => {
               margin="normal"
             />
             <TextField
+              type="text"
+              name="productType"
+              label="Tipo de producto"
+              fullWidth
+              value={formData.productType}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <TextField
               name="description"
               label="Descripción del producto"
               fullWidth
@@ -231,6 +241,16 @@ const UpdateProduct = () => {
               value={formData.description}
               onChange={handleChange}
               margin="normal"
+            />
+            <TextField
+              type="number"
+              name="rating"
+              label="Rating"
+              fullWidth
+              value={formData.rating}
+              onChange={handleChange}
+              margin="normal"
+              inputProps={{ min: 0, max: 5 }}
             />
             <TextField
               type="text"
@@ -249,6 +269,17 @@ const UpdateProduct = () => {
               value={formData.tags}
               onChange={handleChange}
               margin="normal"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.inStock}
+                  onChange={handleChange}
+                  name="inStock"
+                  color="primary"
+                />
+              }
+              label="En stock"
             />
             <Button type="submit" variant="contained" color="primary">
               Actualizar Producto
