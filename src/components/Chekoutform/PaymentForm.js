@@ -3,8 +3,9 @@ import {
   CircularProgress,
   Divider,
   Typography,
-} from "@material-ui/core";
-import React from "react";
+  Box,
+} from "@mui/material";
+import React, { useState } from "react";
 import Review from "./Review";
 import {
   Elements,
@@ -12,18 +13,13 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import { accounting } from "accounting";
+import accounting from "accounting";
 import { actionTypes, getBasketTotal } from "../../reducer";
 import { useStateValue } from "../../StateProvider";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useState } from "react";
-
-const stripePromise = loadStripe(
-  "pk_test_51LAIJWIlL7CBuxtZcmAPD1sA5suFZEldPhSnwUIeq7COSXRCTuz4V19Yhp1Ziqy202co2iWzqg3jnft25AzK23dV00IAPmkVVO"
-);
+import stripePromise from "../../constants/stripeConfig";
 
 const CARD_ELEMENT_OPTIONS = {
   iconStyle: "solid",
@@ -46,14 +42,12 @@ const CARD_ELEMENT_OPTIONS = {
   },
 };
 
-const CheckoutForm = ({ nextStep, backStep }) => {
+const CheckoutForm = ({ nextStep }) => {
   const [{ basket }, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
-  const [paymentMessage, setPaymentMessage] = useState("");
   const stripe = useStripe();
   const elements = useElements();
-
-  const apiUrl = <process class="env REACT_APP_API_URL"></process>;
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,86 +64,68 @@ const CheckoutForm = ({ nextStep, backStep }) => {
         const response = await axios.post(`${apiUrl}/checkout`, {
           id,
           amount: getBasketTotal(basket) * 100,
-          products: basket.map((product) => ({
-            name: product.name,
-            price: product.price,
-          })),
+          products: basket.map(({ name, price }) => ({ name, price })),
         });
 
-        const { data } = response;
-
-        if (data.status === "Successful payment") {
-          setPaymentMessage(data.message);
-          dispatch({
-            type: actionTypes.EMPTY_BASKET,
-            basket: [],
-          });
-
+        if (response.data.status === "Successful payment") {
+          dispatch({ type: actionTypes.EMPTY_BASKET, basket: [] });
           Swal.fire({
             title: "Payment Successful",
             text: "Your payment was processed successfully.",
             icon: "success",
             confirmButtonText: "OK",
           });
-
-          // Avanza al siguiente paso
-          nextStep();
         } else {
-          // Maneja otros mensajes de respuesta, si es necesario
-          setPaymentMessage(data.message || "Payment failed");
-          nextStep();
+          Swal.fire({
+            title: "Payment Failed",
+            text: response.data.message || "Payment failed",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         }
       } else {
-        console.log(error);
         Swal.fire({
           title: "Payment Error",
           text: "There was an error processing your payment. Please try again.",
           icon: "error",
           confirmButtonText: "OK",
         });
-        nextStep();
       }
     } catch (error) {
-      console.log(error);
+      console.error("Payment error:", error);
       Swal.fire({
         title: "Payment Error",
         text: "There was an error processing your payment. Please try again.",
         icon: "error",
         confirmButtonText: "OK",
       });
+    } finally {
+      setLoading(false);
       nextStep();
     }
-
-    setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Box component="form" onSubmit={handleSubmit}>
       <CardElement options={CARD_ELEMENT_OPTIONS} />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "1rem",
-        }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Button variant="outlined" component={Link} to="/shoppingcart">
           Back
         </Button>
         <Button
-          disabled={!stripe}
+          disabled={!stripe || loading}
           type="submit"
           variant="contained"
           color="primary"
         >
           {loading ? (
-            <CircularProgress />
+            <CircularProgress size={24} color="inherit" />
           ) : (
             accounting.formatMoney(getBasketTotal(basket), "USD $")
           )}
         </Button>
-      </div>
-    </form>
+      </Box>
+    </Box>
   );
 };
 
@@ -158,11 +134,9 @@ const PaymentForm = ({ nextStep, backStep }) => {
     <>
       <Review />
       <Divider />
-      <Typography variant="h6" gutterBottom style={{ margin: "20px 0" }}>
+      <Typography variant="h6" gutterBottom sx={{ my: "20px" }}>
         Payment method
       </Typography>
-
-      {/*Elementos de stripe*/}
       <Elements stripe={stripePromise}>
         <CheckoutForm backStep={backStep} nextStep={nextStep} />
       </Elements>

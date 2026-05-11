@@ -2,63 +2,26 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardMedia,
-  Typography,
-  TextField,
-  Button,
-  FormControlLabel,
-  Checkbox,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Box from "@mui/material/Box";
 import axios from "axios";
 import accounting from "accounting";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 705,
-    height: "100%",
-    margin: "auto",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: theme.spacing(2),
-    maxWidth: 500,
-    margin: "auto",
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[3],
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%",
-  },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
-}));
 const MySwal = withReactContent(Swal);
 
 const UpdateProduct = () => {
   const { productId } = useParams();
-
   const navigate = useNavigate();
-  const classes = useStyles();
-  
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [expanded, setExpanded] = useState(false);
+
   const [formData, setFormData] = useState({
     image: "",
     name: "",
@@ -69,6 +32,7 @@ const UpdateProduct = () => {
     tags: "",
     inStock: true,
   });
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -101,29 +65,22 @@ const UpdateProduct = () => {
         console.error("Error en la solicitud:", error);
       }
     };
-    console.log("productId useEffect:", productId);
+
     fetchProduct();
-  }, [productId]);
+  }, [productId, apiUrl]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
     if (type === "checkbox") {
-      setFormData({
-        ...formData,
-        [name]: checked,
-      });
+      setFormData({ ...formData, [name]: checked });
     } else if (name === "rating") {
-      const rating = Math.max(0, Math.min(5, Number(value)));
       setFormData({
         ...formData,
-        [name]: rating,
+        [name]: Math.max(0, Math.min(5, Number(value))),
       });
     } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      setFormData({ ...formData, [name]: value });
     }
   };
 
@@ -149,10 +106,9 @@ const UpdateProduct = () => {
         };
         const response = await axios.put(
           `${apiUrl}/products/${productId}`,
-          updatedProduct
+          updatedProduct,
         );
         if (response.status === 200) {
-          // Mostrar SweetAlert de éxito
           MySwal.fire({
             icon: "success",
             title: "¡Producto actualizado!",
@@ -160,8 +116,6 @@ const UpdateProduct = () => {
           });
           navigate("/");
         } else {
-          console.error("Error al actualizar el producto:", response.status);
-          // Mostrar SweetAlert de error
           MySwal.fire({
             icon: "error",
             title: "¡Error!",
@@ -170,7 +124,6 @@ const UpdateProduct = () => {
         }
       } catch (error) {
         console.error("Error al enviar la solicitud:", error);
-        // Mostrar SweetAlert de error
         MySwal.fire({
           icon: "error",
           title: "¡Error!",
@@ -180,27 +133,38 @@ const UpdateProduct = () => {
     }
   };
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
   return (
-    <Card className={classes.root} elevation={0}>
+    <Card sx={{ maxWidth: 705, height: "100%", margin: "auto" }} elevation={0}>
       <CardContent>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            maxWidth: 500,
+            margin: "auto",
+            padding: 2,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+            boxShadow: 3,
+          }}
+        >
           <CardHeader
             action={
-              <Typography variant="h6" color="textSecondary">
+              <Typography variant="h6" color="text.secondary">
                 {accounting.formatMoney(formData.price, "USD $")}
               </Typography>
             }
             title={formData.name}
-            subheader="in stock"
+            subheader={formData.inStock ? "In stock" : "Out of stock"}
           />
           <CardMedia
-            className={classes.media}
+            component="img"
+            height="194"
             image={formData.image}
-            title={formData.name}
+            alt={formData.name}
           />
           <CardContent>
             <TextField
@@ -248,7 +212,7 @@ const UpdateProduct = () => {
               value={formData.rating}
               onChange={handleChange}
               margin="normal"
-              inputProps={{ min: 0, max: 5 }}
+              slotProps={{ input: { min: 0, max: 5 } }}
             />
             <TextField
               type="text"
@@ -283,7 +247,7 @@ const UpdateProduct = () => {
               Actualizar Producto
             </Button>
           </CardContent>
-        </form>
+        </Box>
       </CardContent>
     </Card>
   );

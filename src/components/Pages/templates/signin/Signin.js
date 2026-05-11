@@ -13,41 +13,16 @@ import {
   Container,
   CircularProgress,
   IconButton,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Alert from "@material-ui/lab/Alert";
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Alert from "@mui/lab/Alert";
 import { jwtDecode } from "jwt-decode";
 
 import { useStateValue } from "../../../../StateProvider";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  loadingContainer: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 export default function SignIn() {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const classes = useStyles();
   const [{}, dispatch] = useStateValue();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -112,14 +87,30 @@ export default function SignIn() {
       </div>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+        <div
+          style={{
+            marginTop: "64px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar
+            sx={{
+              margin: 1,
+              backgroundColor: "#f50057",
+            }}
+          >
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+          <form
+            style={{ width: "100%", marginTop: "8px" }}
+            noValidate
+            onSubmit={handleSubmit}
+          >
             <TextField
               variant="outlined"
               margin="normal"
@@ -155,12 +146,12 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              sx={{ margin: "24px 0 16px" }}
               disabled={loading}
             >
               Sign In
             </Button>
-            <div className={classes.loadingContainer}>
+            <div sx={{ marginTop: 2 }}>
               {loading && <CircularProgress style={{ marginTop: "20px" }} />}
               {success && (
                 <Alert severity="success" style={{ marginTop: "20px" }}>
@@ -187,9 +178,6 @@ export default function SignIn() {
             </Grid>
           </form>
         </div>
-        {/*   <Box mt={8}>
-          <Copyright />
-        </Box> */}
       </Container>
     </div>
   );

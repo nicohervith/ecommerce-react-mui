@@ -1,39 +1,29 @@
 // Footer.js
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Toolbar, Typography, IconButton } from "@material-ui/core";
-import { Facebook, Twitter, Instagram, LinkedIn } from "@material-ui/icons";
-
-const useStyles = makeStyles((theme) => ({
-  footer: {
-    backgroundColor: "#567a51",
-    padding: theme.spacing(1, 0),
-    marginTop: theme.spacing(8),
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  socialIcons: {
-    marginRight: theme.spacing(1),
-    color: "#f9f9f9",
-  },
-}));
+import { Toolbar, Typography, IconButton } from "@mui/material";
+import { Facebook, Twitter, Instagram, LinkedIn } from "@mui/icons-material";
 
 const Footer = () => {
-  const classes = useStyles();
-
   return (
-    <footer className={classes.footer}>
+    <footer
+      style={{
+        backgroundColor: "#567a51",
+        padding: "8px 0",
+        marginTop: "64px",
+        bottom: 0,
+        position: "absolute",
+        width: "100%",
+      }}
+    >
       <Toolbar>
         <Typography variant="body1" style={{ color: "#f9f9f9" }}>
           &copy; 2024 Tu Empresa. Todos los derechos reservados.
         </Typography>
-        <div className={classes.grow} />
+        <div style={{ flexGrow: 1 }} />
         <div>
           <IconButton
             edge="end"
             aria-label="facebook"
-            className={classes.socialIcons}
+            sx={{ marginRight: "8px", color: "#f9f9f9" }}
             href="https://www.facebook.com"
             target="_blank"
           >
@@ -42,7 +32,7 @@ const Footer = () => {
           <IconButton
             edge="end"
             aria-label="twitter"
-            className={classes.socialIcons}
+            sx={{ marginRight: "8px", color: "#f9f9f9" }}
             href="https://www.twitter.com"
             target="_blank"
           >
@@ -51,7 +41,7 @@ const Footer = () => {
           <IconButton
             edge="end"
             aria-label="instagram"
-            className={classes.socialIcons}
+            sx={{ marginRight: "8px", color: "#f9f9f9" }}
             href="https://www.instagram.com"
             target="_blank"
           >
@@ -60,7 +50,7 @@ const Footer = () => {
           <IconButton
             edge="end"
             aria-label="linkedin"
-            className={classes.socialIcons}
+            sx={{ marginRight: "8px", color: "#f9f9f9" }}
             href="https://www.linkedin.com"
             target="_blank"
           >

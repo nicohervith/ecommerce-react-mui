@@ -2,39 +2,17 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useStateValue } from "../../../../StateProvider";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { TextField, Button } from "@material-ui/core";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import Navbar from "../../navbar/Navbar";
 
-const useStyles = makeStyles((theme) => ({
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: theme.spacing(2),
-    maxWidth: 400,
-    margin: "auto",
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[3],
-  },
-  mainCard: {
-    paddingTop: "70px",
-  },
-  input: {
-    marginBottom: theme.spacing(1),
-  },
-  button: {
-    alignSelf: "flex-end",
-  },
-}));
 const MySwal = withReactContent(Swal);
+
 const ProductCreate = () => {
-  const classes = useStyles();
   const [{ user }] = useStateValue();
-  console.log(user);
 
   const [formData, setFormData] = useState({
     image: "",
@@ -56,7 +34,6 @@ const ProductCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    console.log("token", token);
     try {
       const response = await fetch(`${apiUrl}/products/create`, {
         method: "POST",
@@ -68,13 +45,11 @@ const ProductCreate = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         MySwal.fire({
           icon: "success",
           title: "¡Producto creado!",
           text: "El producto se ha creado correctamente.",
         });
-
         setFormData({
           image: "",
           name: "",
@@ -84,7 +59,6 @@ const ProductCreate = () => {
           tags: "",
         });
       } else {
-        console.error("Error al crear el producto");
         MySwal.fire({
           icon: "error",
           title: "¡Error!",
@@ -102,17 +76,26 @@ const ProductCreate = () => {
   };
 
   return (
-    <div>
+    <Box>
       <Navbar />
-      <Card
-        style={{ boxShadow: "none !important" }}
-        elevation={0}
-        className={classes.mainCard}
-      >
+      <Card elevation={0} sx={{ pt: "70px", boxShadow: "none" }}>
         <CardContent>
-          <form className={classes.form} onSubmit={handleSubmit}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              maxWidth: 400,
+              margin: "auto",
+              padding: 2,
+              bgcolor: "background.paper",
+              borderRadius: 1,
+              boxShadow: 3,
+            }}
+          >
             <TextField
-              className={classes.input}
               type="text"
               name="image"
               label="URL de la imagen"
@@ -122,7 +105,6 @@ const ProductCreate = () => {
               fullWidth
             />
             <TextField
-              className={classes.input}
               type="text"
               name="name"
               label="Nombre del producto"
@@ -132,7 +114,6 @@ const ProductCreate = () => {
               fullWidth
             />
             <TextField
-              className={classes.input}
               type="text"
               name="productType"
               label="Tipo de producto"
@@ -142,7 +123,6 @@ const ProductCreate = () => {
               fullWidth
             />
             <TextField
-              className={classes.input}
               name="description"
               label="Descripción del producto"
               variant="outlined"
@@ -153,7 +133,6 @@ const ProductCreate = () => {
               fullWidth
             />
             <TextField
-              className={classes.input}
               type="text"
               name="price"
               label="Precio"
@@ -163,7 +142,6 @@ const ProductCreate = () => {
               fullWidth
             />
             <TextField
-              className={classes.input}
               type="text"
               name="tags"
               label="Etiquetas (separadas por comas)"
@@ -173,17 +151,17 @@ const ProductCreate = () => {
               fullWidth
             />
             <Button
-              className={classes.button}
               type="submit"
               variant="contained"
               color="primary"
+              sx={{ alignSelf: "flex-end" }}
             >
               Crear Producto
             </Button>
-          </form>
+          </Box>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 };
 

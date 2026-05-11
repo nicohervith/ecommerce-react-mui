@@ -26,3 +26,10 @@ yarn-error.log*
 # Ignore specific file
 anotaciones ecommerce video.txt
 ecommerce project.png
+
+anotaciones.txt
+.anotaciones.txt
+
+.env.production
+.env.example
+.env.development

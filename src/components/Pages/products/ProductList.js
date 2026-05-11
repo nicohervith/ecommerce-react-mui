@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Product from "./Product";
-import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    width: "90%",
-    margin: "auto",
-    paddingTop: "90px",
-  },
-}));
-
 const ProductList = () => {
-  const classes = useStyles();
-  const [products, setProducts] = useState([]);
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  const [products, setProducts] = useState([]);
+    
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -28,7 +16,6 @@ const ProductList = () => {
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
-          console.log("data", data);
         } else {
           console.error("Error al obtener productos:", response.status);
         }
@@ -38,51 +25,31 @@ const ProductList = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [apiUrl]);
 
   return (
-    <div>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Navbar />
-
-      {/*  <div className={classes.carouselContainer}>
-        <Slider {...settings}>
-          <div>
-            <img
-              src="https://via.placeholder.com/1200x400?text=Oferta+1"
-              alt="Oferta 1"
-              className={classes.carouselImage}
-            />
-          </div>
-          <div>
-            <img
-              src="https://via.placeholder.com/1200x400?text=Oferta+2"
-              alt="Oferta 2"
-              className={classes.carouselImage}
-            />
-          </div>
-          <div>
-            <img
-              src="https://via.placeholder.com/1200x400?text=Oferta+3"
-              alt="Oferta 3"
-              className={classes.carouselImage}
-            />
-          </div>
-        </Slider>
-      </div> */}
-
-      <div className={classes.root}>
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            {products.map((product) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-                <Product product={product} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </div>
+      <Box
+        sx={{
+          flexGrow: 1,
+          padding: 3,
+          width: "90%",
+          mx: "auto",
+          pt: "90px",
+          alignSelf: "flex-start",
+        }}
+      >
+        <Grid container spacing={3} alignItems="stretch">
+          {products.map((product) => (
+            <Grid item xs={12} sm={6} md={4} key={product._id}>
+              <Product product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

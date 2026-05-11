@@ -1,26 +1,26 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import React, { useState, useEffect } from "react";
-import { styled } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import accounting from "accounting";
+import React, { useState } from "react";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CardMedia from "@mui/material/CardMedia";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   AddShoppingCart,
   DeleteOutline,
   EditOutlined,
-} from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
-import CardMedia from "@material-ui/core/CardMedia";
+} from "@mui/icons-material";
+import accounting from "accounting";
 import { actionTypes } from "../../../reducer";
 import { useStateValue } from "../../../StateProvider";
 import { Link, useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,47 +31,11 @@ const ExpandMore = styled((props) => {
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
   }),
-
-  action: {
-    marginTop: "1rem",
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%",
-  },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
-}));
-
-const useStyles = makeStyles((theme) => ({
-  action: {
-    marginTop: "1rem",
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%",
-  },
-  image: {
-    marginRight: "10px",
-    height: "auto",
-  },
-  iconContainer: {
-    justifyContent: "space-between",
-  },
 }));
 
 const MySwal = withReactContent(Swal);
 
 export default function Product({ product }) {
-  const classes = useStyles();
   const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
   const [{ basket, user }, dispatch] = useStateValue();
@@ -85,30 +49,9 @@ export default function Product({ product }) {
     description,
     inStock,
   } = product;
-  const [products, setProducts] = useState([]);
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/products`);
-        if (response.ok) {
-          const data = await response.json();
-          setProducts(data);
-        } else {
-          console.error("Error al obtener productos:", response.status);
-        }
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const handleExpandClick = () => setExpanded(!expanded);
 
   const addToBasket = () => {
     dispatch({
@@ -143,7 +86,6 @@ export default function Product({ product }) {
         const response = await fetch(`${apiUrl}/products/${id}`, {
           method: "DELETE",
         });
-        setProducts(products.filter((product) => product.id !== id));
         if (response.status === 200) {
           MySwal.fire({
             icon: "success",
@@ -152,7 +94,6 @@ export default function Product({ product }) {
           });
           navigate("/");
         } else {
-          console.error("Error al actualizar el producto:", response.status);
           MySwal.fire({
             icon: "error",
             title: "¡Error!",
@@ -169,31 +110,28 @@ export default function Product({ product }) {
     <Card sx={{ maxWidth: 345, height: "100%" }}>
       <CardHeader
         action={
-          <Typography
-            className={classes.action}
-            variant="h6"
-            color="textSecondary"
-          >
+          <Typography variant="h6" color="text.secondary" sx={{ mt: 2 }}>
             {accounting.formatMoney(price, "USD $")}
           </Typography>
         }
         title={name}
         subheader={inStock ? "In stock" : "Out of stock"}
       />
-      <CardMedia className={classes.media} image={image} title={name} />
+      <CardMedia
+        component="img"
+        height="194"
+        image={image}
+        alt={name}
+      />
       <CardContent>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body2" color="text.secondary">
           {productType}
         </Typography>
       </CardContent>
 
-      <CardActions disableSpacing className={classes.iconContainer}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
+      <CardActions disableSpacing sx={{ justifyContent: "space-between" }}>
+        <Box
+          sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
         >
           <IconButton
             aria-label="Add to Cart"
@@ -209,8 +147,9 @@ export default function Product({ product }) {
                 &#11088;
               </p>
             ))}
-        </div>
-        {user && user.role.includes("admin") && (
+        </Box>
+
+        {user?.role.includes("admin") && (
           <>
             <IconButton
               aria-label="Editar producto"
@@ -224,6 +163,7 @@ export default function Product({ product }) {
             </IconButton>
           </>
         )}
+
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -233,6 +173,7 @@ export default function Product({ product }) {
           <ExpandMoreIcon />
         </ExpandMore>
       </CardActions>
+
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>{description}</Typography>

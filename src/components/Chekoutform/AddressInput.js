@@ -1,8 +1,7 @@
-import { Grid, TextField } from "@material-ui/core";
-import { useFormContext , Controller } from "react-hook-form"
+import { Grid, TextField } from "@mui/material";
+import { useFormContext, Controller } from "react-hook-form";
 
-const AddressInput = ({name,label,required}) => {
-
+const AddressInput = ({ name, label, required }) => {
   const { control } = useFormContext();
 
   return (
@@ -24,6 +23,6 @@ const AddressInput = ({name,label,required}) => {
       />
     </Grid>
   );
-}
+};
 
 export default AddressInput;

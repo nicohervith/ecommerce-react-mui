@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   AppBar,
+  Box,
   Toolbar,
   IconButton,
   Badge,
@@ -8,117 +9,18 @@ import {
   MenuItem,
   Typography,
   InputBase,
-} from "@material-ui/core";
-import { alpha, makeStyles, styled } from "@material-ui/core/styles";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import { Link, Link as RouteLink, useNavigate } from "react-router-dom";
 import { useStateValue } from "../../../StateProvider";
-import { Person, SearchOutlined, ShoppingCart } from "@material-ui/icons";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginBottom: "4rem",
-  },
-  appBarMain: {
-    backgroundColor: "#fbfbfb",
-  },
-
-  appBar: {
-    backgroundColor: "#567a51",
-    boxShadow: "none",
-    minHeight: "50px",
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  button: {
-    marginLeft: theme.spacing(2),
-  },
-  image: {
-    marginRight: "5px",
-  },
-  ShoppingCartContainer: {
-    marginRight: "5px",
-  },
-  categories: {
-    color: "black",
-  },
-  categoriesContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    width: "70%",
-    margin: "auto",
-  },
-  category: {
-    color: "#f9f9f9",
-    margin: "auto",
-    cursor: "pointer",
-  },
-  search: {
-    position: "relative",
-    borderRadius: "6px",
-    background: "#ededed",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "black",
-  },
-  inputRoot: {
-    border: "1px solid #cfcfcf",
-    borderRadius: "6px",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
-  },
-  accessContainer: {
-    display: "flex",
-    flexDirection: "row",
-    color: "#0000008a",
-    alignItems: "center",
-    fontSize: "1.2rem",
-  },
-  loginText: {
-    cursor: "pointer",
-  },
-}));
+import { Person, SearchOutlined, ShoppingCart } from "@mui/icons-material";
 
 export default function Navbar() {
-  const classes = useStyles();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [{ basket, user }, dispatch] = useStateValue();
   const [categoryEl, setCategoryEl] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("user", user);
-
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -154,8 +56,8 @@ export default function Navbar() {
   };
 
   return (
-    <div className={classes.root} position="fixed">
-      <AppBar className={classes.appBarMain}>
+    <div style={{ flexGrow: 1, marginBottom: "4rem" }} position="fixed">
+      <AppBar sx={{ backgroundColor: "#fbfbfb" }}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -171,22 +73,60 @@ export default function Navbar() {
             />
           </IconButton>
 
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
+          <Box
+            sx={{
+              position: "relative",
+              borderRadius: "6px",
+              background: "#ededed",
+              backgroundColor: alpha("#ffffff", 0.15),
+              "&:hover": {
+                backgroundColor: alpha("#ffffff", 0.25),
+              },
+              marginRight: "16px",
+              marginLeft: 0,
+              width: "100%",
+              "@media (min-width: 600px)": {
+                marginLeft: "24px",
+                width: "auto",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                padding: "0 16px",
+                height: "100%",
+                position: "absolute",
+                pointerEvents: "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "black",
+              }}
+            >
               <SearchOutlined />
-            </div>
+            </Box>
             <InputBase
               placeholder="Buscar…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
+              sx={{
+                "& .MuiInputBase-input": {
+                  padding: "8px 8px 8px 0",
+                  paddingLeft: "calc(1em + 32px)",
+                  transition: "width 300ms",
+                  width: "100%",
+                  "@media (min-width: 600px)": {
+                    width: "12ch",
+                    "&:focus": {
+                      width: "20ch",
+                    },
+                  },
+                },
               }}
               inputProps={{ "aria-label": "search" }}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={handleSearch}
+              onKeyDown={handleSearch}
             />
-          </div>
+          </Box>
 
           <div style={{ flexGrow: 1 }} />
           <div>
@@ -202,7 +142,15 @@ export default function Navbar() {
           </div>
 
           <div>
-            <div className={classes.accessContainer}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                color: "#0000008a",
+                alignItems: "center",
+                fontSize: "1.2rem",
+              }}
+            >
               <IconButton
                 edge="end"
                 aria-label="menu"
@@ -216,13 +164,13 @@ export default function Navbar() {
               {!user && (
                 <Typography
                   variant="body1"
-                  className={classes.loginText}
+                  sx={{ cursor: "pointer" }}
                   onClick={handleSignIn}
                 >
                   Acceder
                 </Typography>
               )}
-            </div>
+            </Box>
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
@@ -259,33 +207,37 @@ export default function Navbar() {
             </Menu>
           </div>
         </Toolbar>
-        <Toolbar className={classes.appBar}>
-          <div className={classes.categoriesContainer}>
-            <div
-              className={classes.category}
-              onClick={() => handleCategorySelect("tecnología")}
-            >
-              Tecnología
-            </div>
-            <div
-              className={classes.category}
-              onClick={() => handleCategorySelect("vestimenta")}
-            >
-              Vestimenta
-            </div>
-            <div
-              className={classes.category}
-              onClick={() => handleCategorySelect("artículos de hogar")}
-            >
-              Artículos de hogar
-            </div>
-            <div
-              className={classes.category}
-              onClick={() => handleCategorySelect("mascotas")}
-            >
-              Artículos de mascotas
-            </div>
-          </div>
+        <Toolbar
+          sx={{
+            backgroundColor: "#567a51",
+            boxShadow: "none",
+            minHeight: "50px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              width: "70%",
+              margin: "auto",
+            }}
+          >
+            {[
+              { label: "Tecnología", value: "tecnología" },
+              { label: "Vestimenta", value: "vestimenta" },
+              { label: "Artículos de hogar", value: "artículos de hogar" },
+              { label: "Artículos de mascotas", value: "mascotas" },
+            ].map(({ label, value }) => (
+              <Box
+                key={value}
+                sx={{ color: "#f9f9f9", margin: "auto", cursor: "pointer" }}
+                onClick={() => handleCategorySelect(value)}
+              >
+                {label}
+              </Box>
+            ))}
+          </Box>
         </Toolbar>
       </AppBar>
     </div>

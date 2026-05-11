@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "./base.js";
 
 export const AuthContext = React.createContext();
@@ -8,10 +9,12 @@ export const AuthProvider = ({ children }) => {
   const [pending, setPending] = useState(true);
 
   useEffect(() => {
-    app.auth().onAuthStateChanged((user) => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setPending(false);
     });
+    return unsubscribe;
   }, []);
 
   if (pending) {
@@ -19,11 +22,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        currentUser,
-      }}
-    >
+    <AuthContext.Provider value={{ currentUser }}>
       {children}
     </AuthContext.Provider>
   );

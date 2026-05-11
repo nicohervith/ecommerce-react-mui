@@ -1,26 +1,25 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Alert from "@mui/material/Alert";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import CircularProgress from "@mui/material/CircularProgress";
+import { IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link as RouteLink, useNavigate } from "react-router-dom";
-import Alert from "@material-ui/lab/Alert";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { IconButton } from "@material-ui/core";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Your Website
@@ -31,65 +30,32 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  loadingContainer: {
-    display: "flex",
-    flexDirection: "row",
-  },
-}));
-
 export default function SignUp() {
-  const classes = useStyles();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
-
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
-
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { firstName, lastName, email, password } = formData;
-
-    setLoading(true); // Iniciar el loader
+    setLoading(true);
 
     try {
       const response = await fetch(`${apiUrl}/auth/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: `${firstName} ${lastName}`,
           email,
@@ -100,17 +66,12 @@ export default function SignUp() {
       const data = await response.json();
 
       if (response.ok) {
-        // Manejar el éxito del registro
         setSuccess(true);
-        console.log("Usuario registrado con éxito:", data);
-
-        // Redirigir al usuario a la página de inicio de sesión después de 2 segundos
         setTimeout(() => {
           setLoading(false);
           navigate("/signin");
         }, 2000);
       } else {
-        // Manejar errores
         setSuccess(false);
         setLoading(false);
         console.error("Error al registrar usuario:", data.message);
@@ -123,26 +84,35 @@ export default function SignUp() {
   };
 
   return (
-    <div>
-      <div style={{ padding: "10px" }}>
-        <IconButton
-          onClick={() => navigate("/signin")}
-          style={{ alignSelf: "flex-start" }}
-        >
+    <Box>
+      <Box sx={{ padding: "10px" }}>
+        <IconButton onClick={() => navigate("/signin")}>
           <ArrowBackIcon />
-          <p>Volver</p>
+          <Typography variant="body2">Volver</Typography>
         </IconButton>
-      </div>
+      </Box>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ margin: 1, backgroundColor: "#f50057" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ width: "100%", mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -151,7 +121,6 @@ export default function SignUp() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="firstName"
                   label="First Name"
                   autoFocus
                   value={formData.firstName}
@@ -162,7 +131,6 @@ export default function SignUp() {
                 <TextField
                   variant="outlined"
                   fullWidth
-                  id="lastName"
                   label="Last Name"
                   name="lastName"
                   autoComplete="lname"
@@ -175,7 +143,6 @@ export default function SignUp() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
@@ -191,7 +158,6 @@ export default function SignUp() {
                   name="password"
                   label="Password"
                   type="password"
-                  id="password"
                   autoComplete="current-password"
                   value={formData.password}
                   onChange={handleChange}
@@ -211,34 +177,33 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
-              disabled={loading} // Deshabilitar el botón mientras carga
+              sx={{ my: 3 }}
+              disabled={loading}
             >
               Sign Up
             </Button>
-            <div className={classes.loadingContainer}>
-              {loading && <CircularProgress style={{ marginTop: "20px" }} />}{" "}
-              {/* Mostrar loader mientras carga */}
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              {loading && <CircularProgress sx={{ mt: 2 }} />}
               {success && (
-                <Alert severity="success" style={{ marginTop: "20px" }}>
+                <Alert severity="success" sx={{ mt: 2 }}>
                   Usuario registrado con éxito! Redirigiendo a la página de
                   inicio de sesión...
                 </Alert>
               )}
-            </div>
+            </Box>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <RouteLink to="/signin" variant="body2">
+                <RouteLink to="/signin">
                   Already have an account? Sign in
                 </RouteLink>
               </Grid>
             </Grid>
-          </form>
-        </div>
-        <Box mt={5}>
-          <Copyright />
+          </Box>
+          <Box mt={5}>
+            <Copyright />
+          </Box>
         </Box>
       </Container>
-    </div>
+    </Box>
   );
 }

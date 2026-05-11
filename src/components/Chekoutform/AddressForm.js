@@ -1,14 +1,13 @@
-import { Button, Grid, Typography } from '@material-ui/core'
-import {useForm, FormProvider} from "react-hook-form";
-import { Link } from 'react-router-dom';
-import AddressInput from './AddressInput';
+import { Button, Grid, Typography, Box } from "@mui/material";
+import { useForm, FormProvider } from "react-hook-form";
+import { Link } from "react-router-dom";
+import AddressInput from "./AddressInput";
 import { useStateValue } from "../../StateProvider";
 import { actionTypes } from "../../reducer";
 
-
-const AddressForm = ({nextStep}) => {
+const AddressForm = ({ nextStep }) => {
   const methods = useForm();
-  const [{shippingData}, dispatch] = useStateValue();
+  const [{ shippingData }, dispatch] = useStateValue();
 
   return (
     <>
@@ -16,16 +15,14 @@ const AddressForm = ({nextStep}) => {
         Shipping address
       </Typography>
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(data => {
-            console.log(data);
+        <Box
+          component="form"
+          onSubmit={methods.handleSubmit((data) => {
             dispatch({
-              type:actionTypes.SET_SHIPPINGDATA,
+              type: actionTypes.SET_SHIPPINGDATA,
               shippingData: data,
-              //El shippingData lo relleno con los datos de data
             });
             nextStep();
-
           })}
         >
           <Grid container spacing={3}>
@@ -34,16 +31,10 @@ const AddressForm = ({nextStep}) => {
             <AddressInput required name="address1" label="Address" />
             <AddressInput required name="email" label="Email address" />
             <AddressInput required name="city" label="City" />
-            <AddressInput required name="postCode" label="Post Code " />
+            <AddressInput required name="postCode" label="Post Code" />
           </Grid>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "1rem",
-            }}
-          >
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <Button
               component={Link}
               to="/shoppingcart"
@@ -52,15 +43,14 @@ const AddressForm = ({nextStep}) => {
             >
               Back to shopping cart
             </Button>
-            <Button 
-            type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Next
             </Button>
-          </div>
-        </form>
+          </Box>
+        </Box>
       </FormProvider>
     </>
   );
-}
+};
 
-export default AddressForm
+export default AddressForm;
